@@ -13,7 +13,7 @@ class Timer:
         if not path.isfile(self.filename):
             call(['touch', self.filename])
 
-        signal(SIGINT, self.handle_signal)
+        signal(SIGINT, self.quit)
 
         self.log('=' * 20)
         self.log(' Timer started')
@@ -22,20 +22,23 @@ class Timer:
         self.start = datetime.now()
         self.log('Start ......: {}'.format(self.start))
         
-        lap = self.start
+        self.last_lap = self.start
         while True:
             _input = input('\nPressione ENTER para marcar o tempo ')
             now = datetime.now()
-            delta = str(now - lap)
+            delta = str(now - self.last_lap)
             self.log('Lap ........: {} ...... ({})'.format(now, delta))
+            self.last_lap = now
 
     def log(self, line):
         print(line)
         with open(self.filename, 'a') as f:
             f.write(line + '\n')
 
-    def handle_signal(self, signal, frame):
-        self.log('Finished!\n')
+    def quit(self, signal, frame):
+        now = datetime.now()
+        total_time = (self.last_lap - self.start)
+        self.log('Finished ...: {}\n'.format(total_time))
         exit()
 
 
