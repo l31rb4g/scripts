@@ -38,6 +38,7 @@ class Timer:
     def quit(self, signal, frame):
         now = datetime.now()
         total_time = (self.last_lap - self.start)
+        print('\n')
         self.log('Finished ...: {}\n'.format(total_time))
         exit()
 
