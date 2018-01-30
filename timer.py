@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from os import path
+from sys import argv
 from subprocess import call
 from signal import signal, SIGINT
 from datetime import datetime, timedelta
@@ -8,16 +9,24 @@ from datetime import datetime, timedelta
 class Timer:
 
     filename = 'timer.log'
+    title = None
 
     def __init__(self):
         if not path.isfile(self.filename):
             call(['touch', self.filename])
 
+        _args = argv
+        _args.pop(0)
+        self.title = ' '.join(_args)
+
         signal(SIGINT, self.quit)
 
-        self.log('=' * 20)
-        self.log(' Timer started')
-        self.log('=' * 20)
+        self.log('=' * 40)
+        title = ' Timer started'
+        if self.title:
+            title += (': ' + self.title)
+        self.log(title)
+        self.log('=' * 40)
         
         self.start = datetime.now()
         self.log('Start ......: {}'.format(self.start))
@@ -27,7 +36,7 @@ class Timer:
             _input = input('\nPressione ENTER para marcar o tempo ')
             now = datetime.now()
             delta = str(now - self.last_lap)
-            self.log('Lap ........: {} ...... ({})'.format(now, delta))
+            self.log('Lap ........: {} ...... ({}) {}'.format(now, delta, _input))
             self.last_lap = now
 
     def log(self, line):
