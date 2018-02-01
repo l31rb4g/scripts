@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Tenis Polar</title>
+</head>
+<body>
+	<div>
+		<textarea id="tenis" onkeyup="change()" onchange="change()" style="width:99%;height:300px" placeholder="Digite aqui o texto..."></textarea>
+		<textarea id="polar" style="width:99%;height:300px" readonly></textarea>
+	</div>
+	
+	<script>
+	var h = parseInt((document.body.scrollHeight - 100) / 2) +'px';
+	var t = document.getElementsByTagName('textarea');
+	t[0].style.height = h;
+	t[1].style.height = h;
+	function change(){
+		console.log('change');
+		var t = document.getElementById('tenis');
+		console.log(t)
+		var p = document.getElementById('polar');
+		p.value = tenispolar(t.value);
+	}
+	function tenispolar(t){
+	  t = t.toLowerCase();
+	  var spl = t.split('')
+	  var subs = [
+		['t', 'p'],
+		['e', 'o'],
+		['n', 'l'],
+		['i', 'a'],
+		['s', 'r']
+	  ];
+	  r = '';
+	  spl.forEach(function(l){
+		var found = false;
+		subs.forEach(function(s){
+		  var i = s.indexOf(l);
+			if (s.indexOf(l) > -1){
+			found = true;
+			r += s[s[0] == l ? 1 : 0];
+		  }
+		});
+		if (!found){
+			r += l;
+		}
+	  });
+	  return r;
+	}
+	</script>
+</body>
+</html>
