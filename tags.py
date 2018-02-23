@@ -11,6 +11,6 @@ def run_ctags(exclude_dir):
 
 if __name__ == '__main__':
     exclude = os.path.basename(os.getcwd())
-    thread = Thread(target=run_ctags, args=(exclude,)
+    thread = Thread(target=run_ctags, args=(exclude,))
     thread.start()
 
