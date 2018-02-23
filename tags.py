@@ -9,7 +9,7 @@ def run_ctags(exclude_dir):
     print('>>>', cmd0)
     call(cmd0, shell=True)
 
-    cmd1 = "ctags -R --exclude='*/{}' $VIRTUAL_ENV".format(exclude_dir)
+    cmd1 = "ctags -R --exclude='*/{}' $VIRTUAL_ENV/".format(exclude_dir)
     print('>>>', cmd1)
     call(cmd1, shell=True)
 
