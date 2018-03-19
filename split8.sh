@@ -5,7 +5,8 @@ CMD2='workon dashboard && npm start'
 CMD3='workon broker && python -m import_broker.run'
 CMD4='workon watcher-archive && python -m watcher_archive.run'
 CMD5='workon worker-archive && python -m worker_archive.run'
-CMD6='workon swf-api && ./debug_create_mysqldb.sh'
+CMD6='workon swf-api'
+CMD6b='./debug_create_mysqldb.sh'
 CMD7='cp /home/gpaladino/Videos/_shorthd.mxf /home/gpaladino/tmp/watchdir'
 CMD8='cd /tmp/sftp && watch -n1 ls -1'
 
@@ -39,7 +40,8 @@ xdotool key 'alt+Left'
 xdotool key 'alt+Left'
 xdotool key 'ctrl+shift+e'
 xdotool type "$CMD6" # Q6
-#enter
+enter
+xdotool type "$CMD6b" # Q6
 
 xdotool key 'alt+Up'
 xdotool key 'ctrl+shift+e'
