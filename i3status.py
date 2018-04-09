@@ -55,9 +55,9 @@ while True:
         volume = 'muted'
 
     data = [
-        line(ip, color='#00FF00'),
+        line('🔊 ' + ip, color='#00FF00'),
         separator,
-        line('vol ' + volume, color='#FF11F5'),
+        line('♬ ' + volume , color='#00FFFF'),
         separator,
         line(datetime.now().strftime('%d/%m/%Y'), color='#CCCCCC'),
         separator,
