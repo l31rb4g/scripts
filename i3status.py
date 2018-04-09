@@ -33,7 +33,10 @@ def _print(t, end='\n'):
     print(t, end=end)
     sys.stdout.flush()
 
-
+def shell(cmd):
+    output = check_output(cmd, shell=True)
+    output = output.decode().strip()
+    return output
 
 
 _print('{"version":1}')
@@ -45,10 +48,16 @@ while True:
         _print(',', end='')
     first = False
 
-    ip = check_output("ifconfig eno1 | grep broadcast | sed 's/ \+inet \([0-9.]\+\) .*/\\1/'", shell=True).decode().strip()
+    ip = shell("ifconfig eno1 | grep broadcast | sed 's/ \+inet \([0-9.]\+\) .*/\\1/'")
+    volume = shell("pactl list sinks| grep Volume | grep -v 'Base Volume' | sed 's/.* \([0-9]\+\)%.*/\\1/'") + '%'
+    is_mute = shell("pactl list sinks | grep Mute")
+    if 'yes' in is_mute:
+        volume = 'muted'
 
     data = [
         line(ip, color='#00FF00'),
+        separator,
+        line('vol ' + volume, color='#FF11F5'),
         separator,
         line(datetime.now().strftime('%d/%m/%Y'), color='#CCCCCC'),
         separator,
