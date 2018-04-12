@@ -8,7 +8,7 @@ from subprocess import check_output
 
 # config
 config = {
-    'interval': 1,
+    'interval': 0.5,
     'separator': ' | '
 }
 
@@ -55,11 +55,11 @@ while True:
         volume = 'muted'
 
     data = [
-        line('🔊 ' + ip, color='#00FF00'),
+        line(ip, color='#00FF00'),
         separator,
-        line('♬ ' + volume , color='#00FFFF'),
+        line(volume , color='#00FFFF'),
         separator,
-        line(datetime.now().strftime('%d/%m/%Y'), color='#CCCCCC'),
+        line(' ' + datetime.now().strftime('%d/%m/%Y'), color='#CCCCCC'),
         separator,
         line(datetime.now().strftime('%H:%M'))
     ]
