@@ -1,6 +1,7 @@
 #!/bin/bash
 
-xdotool key "control+shift+e"
+#xdotool key "control+shift+e"
+urxvt &
 #xdotool type 'ag --hidden --pager "less -r" "'$1'"'
 #xdotool key KP_Enter
 sleep 0.5
