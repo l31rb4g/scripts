@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import os
 import sys
 import json
 from time import sleep
@@ -6,11 +7,17 @@ from datetime import datetime
 from subprocess import check_output
 
 
+# network devices
+network_devices = {
+    'acapulco': 'eno1',
+    'downquark': 'enp0s25'
+}
+
 # config
 config = {
     'interval': 0.5,
     'separator': ' | ',
-    'device': 'enp0s25',
+    'device': network_devices[os.uname().nodename],
 }
 
 
