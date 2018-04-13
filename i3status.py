@@ -9,7 +9,8 @@ from subprocess import check_output
 # config
 config = {
     'interval': 0.5,
-    'separator': ' | '
+    'separator': ' | ',
+    'device': 'enp0s25',
 }
 
 
@@ -48,7 +49,7 @@ while True:
         _print(',', end='')
     first = False
 
-    ip = shell("ifconfig eno1 | grep broadcast | sed 's/ \+inet \([0-9.]\+\) .*/\\1/'")
+    ip = shell("ifconfig " + config['device'] + " | grep broadcast | sed 's/ \+inet \([0-9.]\+\) .*/\\1/'")
     volume = shell("pactl list sinks| grep Volume | grep -v 'Base Volume' | sed 's/.* \([0-9]\+\)%.*/\\1/'") + '%'
     is_mute = shell("pactl list sinks | grep Mute")
     if 'yes' in is_mute:
@@ -59,7 +60,7 @@ while True:
         separator,
         line(volume , color='#00FFFF'),
         separator,
-        line(' ' + datetime.now().strftime('%d/%m/%Y'), color='#CCCCCC'),
+        line(datetime.now().strftime('%d/%m/%Y'), color='#CCCCCC'),
         separator,
         line(datetime.now().strftime('%H:%M'))
     ]
