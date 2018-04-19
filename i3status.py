@@ -28,7 +28,7 @@ separator = {
     'color': '#CCCCCC'
 }
 
-def line(text, color='#FFFFFF'):
+def block(text, color='#FFFFFF'):
     return {
         "color": color,
         "separator": False,
@@ -55,21 +55,34 @@ while True:
     if not first:
         _print(',', end='')
     first = False
+    
+    size = shell('df -h / | grep sda')
+    while '  ' in size:
+        size = size.replace('  ', ' ')
+    size = size.split(' ')
+    root_dev = size[0] + ' '
+    used_space = '{} used, '.format(size[4])
+    free_space = '{} free'.format(size[3])
 
     ip = shell("ifconfig " + config['device'] + " | grep broadcast | sed 's/ \+inet \([0-9.]\+\) .*/\\1/'")
+
     volume = shell("pactl list sinks| grep Volume | grep -v 'Base Volume' | sed 's/.* \([0-9]\+\)%.*/\\1/'") + '%'
     is_mute = shell("pactl list sinks | grep Mute")
     if 'yes' in is_mute:
         volume = 'muted'
 
     data = [
-        line(ip, color='#00FF00'),
+        block(root_dev, color='#ffff66'),
+        block(used_space, color='#cccccc'),
+        block(free_space, color='#00FF00'),
         separator,
-        line(volume , color='#00FFFF'),
+        block(ip, color='#FF5555'),
         separator,
-        line(datetime.now().strftime('%d/%m/%Y'), color='#CCCCCC'),
+        block(volume , color='#00FFFF'),
         separator,
-        line(datetime.now().strftime('%H:%M'))
+        block(datetime.now().strftime('%d/%m/%Y'), color='#CCCCCC'),
+        separator,
+        block(datetime.now().strftime('%H:%M'))
     ]
     _print(json.dumps(data))
 
