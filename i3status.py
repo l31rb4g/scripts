@@ -56,13 +56,21 @@ while True:
         _print(',', end='')
     first = False
     
+    size = shell('df -h /home | grep sda')
+    while '  ' in size:
+        size = size.replace('  ', ' ')
+    size = size.split(' ')
+    home_dev = size[5] + ' '
+    home_used = '{} used, '.format(size[4])
+    home_free = '{} free'.format(size[3])
+
     size = shell('df -h / | grep sda')
     while '  ' in size:
         size = size.replace('  ', ' ')
     size = size.split(' ')
-    root_dev = size[0] + ' '
-    used_space = '{} used, '.format(size[4])
-    free_space = '{} free'.format(size[3])
+    root_dev = size[5] + ' '
+    root_used = '{} used, '.format(size[4])
+    root_free = '{} free'.format(size[3])
 
     ip = shell("ifconfig " + config['device'] + " | grep broadcast | sed 's/ \+inet \([0-9.]\+\) .*/\\1/'")
 
@@ -72,9 +80,15 @@ while True:
         volume = 'muted'
 
     data = [
+        block(home_dev, color='#ffff66'),
+        block(home_used, color='#cccccc'),
+        block(home_free, color='#00FF00'),
+        separator,
+
         block(root_dev, color='#ffff66'),
-        block(used_space, color='#cccccc'),
-        block(free_space, color='#00FF00'),
+        block(root_used, color='#cccccc'),
+        block(root_free, color='#00FF00'),
+
         separator,
         block(ip, color='#FF5555'),
         separator,
