@@ -103,18 +103,18 @@ while True:
         block('MEM ' + meminfo, color='#ff6600'),
         separator,
 
-        block(storage_dev, color='#ffff66'),
-        block(storage_used, color='#cccccc'),
+        block(storage_dev, color='#cccccc'),
+        block(storage_used, color='#ffff66'),
         block(storage_free, color='#00FF00'),
         separator,
 
-        block(home_dev, color='#ffff66'),
-        block(home_used, color='#cccccc'),
+        block(home_dev, color='#cccccc'),
+        block(home_used, color='#ffff66'),
         block(home_free, color='#00FF00'),
         separator,
 
-        block(root_dev, color='#ffff66'),
-        block(root_used, color='#cccccc'),
+        block(root_dev, color='#cccccc'),
+        block(root_used, color='#ffff66'),
         block(root_free, color='#00FF00'),
         separator,
 
