@@ -56,6 +56,14 @@ while True:
     if not first:
         _print(',', end='')
     first = False
+
+    cpu_cores = 4
+    cpu_usage = shell("cat /proc/loadavg | sed 's/\([^ ]\+\).*/\\1/g'")
+    cpu_usage = str(round(float(cpu_usage) * (100 / cpu_cores))) + '%'
+
+    meminfo = shell("free -m | grep Mem | sed -e 's/Mem: \+\([^ ]\+\) \+\([^ ]\+\).*/\\2\/\\1/g'")
+    meminfo = meminfo.split('/')
+    meminfo = str(round(int(meminfo[0]) / int(meminfo[1]) * 100)) + '%'
     
     size = shell('df -h /storage | grep sdb')
     while '  ' in size:
@@ -89,6 +97,12 @@ while True:
         volume = 'muted'
 
     data = [
+        block('CPU ' + cpu_usage, color='#ff66ff'),
+        separator,
+
+        block('MEM ' + meminfo, color='#f65676'),
+        separator,
+
         block(storage_dev, color='#ffff66'),
         block(storage_used, color='#cccccc'),
         block(storage_free, color='#00FF00'),
