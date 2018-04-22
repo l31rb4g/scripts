@@ -33,7 +33,8 @@ def block(text, color='#FFFFFF'):
         "color": color,
         "separator": False,
         "separator_block_width": 1,
-        "full_text": text
+        "full_text": text,
+        "markup": "pango",
     }
 
 
@@ -56,6 +57,14 @@ while True:
         _print(',', end='')
     first = False
     
+    size = shell('df -h /storage | grep sdb')
+    while '  ' in size:
+        size = size.replace('  ', ' ')
+    size = size.split(' ')
+    storage_dev = size[5] + ' '
+    storage_used = '{} used, '.format(size[4])
+    storage_free = '{} free'.format(size[3])
+
     size = shell('df -h /home | grep sda')
     while '  ' in size:
         size = size.replace('  ', ' ')
@@ -80,6 +89,11 @@ while True:
         volume = 'muted'
 
     data = [
+        block(storage_dev, color='#ffff66'),
+        block(storage_used, color='#cccccc'),
+        block(storage_free, color='#00FF00'),
+        separator,
+
         block(home_dev, color='#ffff66'),
         block(home_used, color='#cccccc'),
         block(home_free, color='#00FF00'),
@@ -94,9 +108,9 @@ while True:
         separator,
         block(volume , color='#00FFFF'),
         separator,
-        block(datetime.now().strftime('%d/%m/%Y'), color='#CCCCCC'),
+        block(datetime.now().strftime('%d/%m/%Y'), color='#AAAAAA'),
         separator,
-        block(datetime.now().strftime('%H:%M'))
+        block('<span font_weight="bold">' + datetime.now().strftime('%H:%M') + '</span>')
     ]
     _print(json.dumps(data))
 
