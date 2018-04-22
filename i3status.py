@@ -118,13 +118,13 @@ while True:
         block(root_free, color='#00FF00'),
         separator,
 
-        block(ip, color='#6666ff'),
+        block(ip, color='#8888ff'),
         separator,
 
-        block(volume , color='#33ffff'),
+        block(volume , color='#66ffff'),
         separator,
 
-        block(datetime.now().strftime('%d/%m/%Y'), color='#AAAAAA'),
+        block(datetime.now().strftime('%d/%m/%Y'), color='#bbbbbb'),
         separator,
 
         block('<span font_weight="bold">' + datetime.now().strftime('%H:%M') + '</span>')
