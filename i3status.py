@@ -97,10 +97,10 @@ while True:
         volume = 'muted'
 
     data = [
-        block('CPU ' + cpu_usage, color='#ff66ff'),
+        block('CPU ' + cpu_usage, color='#ff3333'),
         separator,
 
-        block('MEM ' + meminfo, color='#f65676'),
+        block('MEM ' + meminfo, color='#ff6600'),
         separator,
 
         block(storage_dev, color='#ffff66'),
@@ -116,14 +116,17 @@ while True:
         block(root_dev, color='#ffff66'),
         block(root_used, color='#cccccc'),
         block(root_free, color='#00FF00'),
+        separator,
 
+        block(ip, color='#6666ff'),
         separator,
-        block(ip, color='#FF5555'),
+
+        block(volume , color='#33ffff'),
         separator,
-        block(volume , color='#00FFFF'),
-        separator,
+
         block(datetime.now().strftime('%d/%m/%Y'), color='#AAAAAA'),
         separator,
+
         block('<span font_weight="bold">' + datetime.now().strftime('%H:%M') + '</span>')
     ]
     _print(json.dumps(data))
