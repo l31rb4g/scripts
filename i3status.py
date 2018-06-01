@@ -57,7 +57,8 @@ while True:
         _print(',', end='')
     first = False
 
-    cpu_cores = 4
+    # cpu_cores = 4
+    cpu_cores = 8
     cpu_usage = shell("cat /proc/loadavg | sed 's/\([^ ]\+\).*/\\1/g'")
     cpu_usage = str(round(float(cpu_usage) * (100 / cpu_cores))) + '%'
 
@@ -65,13 +66,13 @@ while True:
     meminfo = meminfo.split('/')
     meminfo = str(round(int(meminfo[0]) / int(meminfo[1]) * 100)) + '%'
     
-    size = shell('df -h /storage | grep sdb')
-    while '  ' in size:
-        size = size.replace('  ', ' ')
-    size = size.split(' ')
-    storage_dev = size[5] + ' '
-    storage_used = '{} used, '.format(size[4])
-    storage_free = '{} free'.format(size[3])
+    # size = shell('df -h /storage | grep sdb')
+    # while '  ' in size:
+        # size = size.replace('  ', ' ')
+    # size = size.split(' ')
+    # storage_dev = size[5] + ' '
+    # storage_used = '{} used, '.format(size[4])
+    # storage_free = '{} free'.format(size[3])
 
     size = shell('df -h /home | grep sda')
     while '  ' in size:
@@ -103,10 +104,10 @@ while True:
         block('MEM ' + meminfo, color='#ff6600'),
         separator,
 
-        block(storage_dev, color='#ffff66'),
-        block(storage_used, color='#cccccc'),
-        block(storage_free, color='#00FF00'),
-        separator,
+        # block(storage_dev, color='#ffff66'),
+        # block(storage_used, color='#cccccc'),
+        # block(storage_free, color='#00FF00'),
+        # separator,
 
         block(home_dev, color='#ffff66'),
         block(home_used, color='#cccccc'),
