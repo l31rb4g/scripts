@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python
 import os
 import sys
 import json
@@ -9,7 +9,7 @@ from subprocess import check_output
 
 # network devices
 network_devices = {
-    'acapulco': 'eno1',
+    'acapulco': 'em0',
     'downquark': 'enp0s25'
 }
 
@@ -56,16 +56,19 @@ while True:
     if not first:
         _print(',', end='')
     first = False
-
-    # cpu_cores = 4
-    cpu_cores = 8
-    cpu_usage = shell("cat /proc/loadavg | sed 's/\([^ ]\+\).*/\\1/g'")
-    cpu_usage = str(round(float(cpu_usage) * (100 / cpu_cores))) + '%'
-
-    meminfo = shell("free -m | grep Mem | sed -e 's/Mem: \+\([^ ]\+\) \+\([^ ]\+\).*/\\2\/\\1/g'")
-    meminfo = meminfo.split('/')
-    meminfo = str(round(int(meminfo[0]) / int(meminfo[1]) * 100)) + '%'
     
+    # CPU USAGE
+    # cpu_cores = 4
+    #cpu_cores = 8
+    #cpu_usage = shell("cat /proc/loadavg | sed 's/\([^ ]\+\).*/\\1/g'")
+    #cpu_usage = str(round(float(cpu_usage) * (100 / cpu_cores))) + '%'
+    
+    # MEMORY USAGE
+    #meminfo = shell("free -m | grep Mem | sed -e 's/Mem: \+\([^ ]\+\) \+\([^ ]\+\).*/\\2\/\\1/g'")
+    #meminfo = meminfo.split('/')
+    #meminfo = str(round(int(meminfo[0]) / int(meminfo[1]) * 100)) + '%'
+    
+    # DISK SPACE
     # size = shell('df -h /storage | grep sdb')
     # while '  ' in size:
         # size = size.replace('  ', ' ')
@@ -73,51 +76,53 @@ while True:
     # storage_dev = size[5] + ' '
     # storage_used = '{} used, '.format(size[4])
     # storage_free = '{} free'.format(size[3])
+    
+    #size = shell('df -h /home | grep sda')
+    #while '  ' in size:
+    #    size = size.replace('  ', ' ')
+    #size = size.split(' ')
+    #home_dev = size[5] + ' '
+    #home_used = '{} used, '.format(size[4])
+    #home_free = '{} free'.format(size[3])
 
-    size = shell('df -h /home | grep sda')
-    while '  ' in size:
-        size = size.replace('  ', ' ')
-    size = size.split(' ')
-    home_dev = size[5] + ' '
-    home_used = '{} used, '.format(size[4])
-    home_free = '{} free'.format(size[3])
+    #size = shell('df -h / | grep sda')
+    #while '  ' in size:
+    #    size = size.replace('  ', ' ')
+    #size = size.split(' ')
+    #root_dev = size[5] + ' '
+    #root_used = '{} used, '.format(size[4])
+    #root_free = '{} free'.format(size[3])
+    
+    # NETWORK ADDRESS
+    ip = shell("ifconfig " + config['device'] + " | grep broadcast | sed 's/inet \([0-9.]*\) .*/\\1/'")
 
-    size = shell('df -h / | grep sda')
-    while '  ' in size:
-        size = size.replace('  ', ' ')
-    size = size.split(' ')
-    root_dev = size[5] + ' '
-    root_used = '{} used, '.format(size[4])
-    root_free = '{} free'.format(size[3])
-
-    ip = shell("ifconfig " + config['device'] + " | grep broadcast | sed 's/ \+inet \([0-9.]\+\) .*/\\1/'")
-
-    volume = shell("pactl list sinks| grep Volume | grep -v 'Base Volume' | sed 's/.* \([0-9]\+\)%.*/\\1/'") + '%'
-    is_mute = shell("pactl list sinks | grep Mute")
-    if 'yes' in is_mute:
-        volume = 'muted'
+    # VOLUME
+    volume = shell('mixer | head -n1 | sed -e "s/.*:\([0-9]\)/\\1/g"') + '%'
+    #is_mute = shell("pactl list sinks | grep Mute")
+    #if 'yes' in is_mute:
+    #    volume = 'muted'
 
     data = [
-        block('CPU ' + cpu_usage, color='#ff3333'),
-        separator,
+        #block('CPU ' + cpu_usage, color='#ff3333'),
+        #separator,
 
-        block('MEM ' + meminfo, color='#ff6600'),
-        separator,
+        #block('MEM ' + meminfo, color='#ff6600'),
+        #separator,
 
         # block(storage_dev, color='#ffff66'),
         # block(storage_used, color='#cccccc'),
         # block(storage_free, color='#00FF00'),
         # separator,
 
-        block(home_dev, color='#ffff66'),
-        block(home_used, color='#cccccc'),
-        block(home_free, color='#00FF00'),
-        separator,
+        #block(home_dev, color='#ffff66'),
+        #block(home_used, color='#cccccc'),
+        #block(home_free, color='#00FF00'),
+        #separator,
 
-        block(root_dev, color='#ffff66'),
-        block(root_used, color='#cccccc'),
-        block(root_free, color='#00FF00'),
-        separator,
+        #block(root_dev, color='#ffff66'),
+        #block(root_used, color='#cccccc'),
+        #block(root_free, color='#00FF00'),
+        #separator,
 
         block(ip, color='#8888ff'),
         separator,
