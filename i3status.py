@@ -97,10 +97,10 @@ while True:
     ip = shell("ifconfig " + config['device'] + " | grep broadcast | sed 's/inet \([0-9.]*\) .*/\\1/'")
 
     # VOLUME
-    volume = shell('mixer | head -n1 | sed -e "s/.*:\([0-9]\)/\\1/g"') + '%'
-    #is_mute = shell("pactl list sinks | grep Mute")
-    #if 'yes' in is_mute:
-    #    volume = 'muted'
+    volume = shell('mixer vol | sed -e "s/.*:\([0-9]\)/\\1/g"') + '%'
+    is_mute = shell("cat /var/run/mixer.muted")
+    if is_mute != '':
+        volume = 'muted'
 
     data = [
         #block('CPU ' + cpu_usage, color='#ff3333'),
