@@ -85,13 +85,13 @@ while True:
     #home_used = '{} used, '.format(size[4])
     #home_free = '{} free'.format(size[3])
 
-    #size = shell('df -h / | grep sda')
-    #while '  ' in size:
-    #    size = size.replace('  ', ' ')
-    #size = size.split(' ')
-    #root_dev = size[5] + ' '
-    #root_used = '{} used, '.format(size[4])
-    #root_free = '{} free'.format(size[3])
+    size = shell('df -h / | grep ada')
+    while '  ' in size:
+        size = size.replace('  ', ' ')
+    size = size.split(' ')
+    root_dev = size[5] + ' '
+    root_used = '{} used, '.format(size[4])
+    root_free = '{} free'.format(size[3])
     
     # NETWORK ADDRESS
     ip = shell("ifconfig " + config['device'] + " | grep broadcast | sed 's/inet \([0-9.]*\) .*/\\1/'")
@@ -119,10 +119,10 @@ while True:
         #block(home_free, color='#00FF00'),
         #separator,
 
-        #block(root_dev, color='#ffff66'),
-        #block(root_used, color='#cccccc'),
-        #block(root_free, color='#00FF00'),
-        #separator,
+        block(root_dev, color='#ffff66'),
+        block(root_used, color='#cccccc'),
+        block(root_free, color='#00FF00'),
+        separator,
 
         block(ip, color='#8888ff'),
         separator,
