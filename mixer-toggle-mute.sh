@@ -1,6 +1,6 @@
 #!/usr/local/bin/bash
 
-FILE=/var/run/mixer.muted
+FILE=/tmp/mixer.muted
 
 
 LAST_VOLUME=$(cat $FILE)

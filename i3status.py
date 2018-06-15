@@ -97,8 +97,11 @@ while True:
     ip = shell("ifconfig " + config['device'] + " | grep broadcast | sed 's/inet \([0-9.]*\) .*/\\1/'")
 
     # VOLUME
+    mute_file = '/tmp/mixer.muted'
     volume = shell('mixer vol | sed -e "s/.*:\([0-9]\)/\\1/g"') + '%'
-    is_mute = shell("cat /var/run/mixer.muted")
+    is_mute = ''
+    if os.path.isfile(mute_file):
+        is_mute = shell("cat " + mute_file)
     if is_mute != '':
         volume = 'muted'
 
