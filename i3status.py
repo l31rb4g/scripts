@@ -10,7 +10,7 @@ from subprocess import check_output
 # network devices
 network_devices = {
     'acapulco': 'em0',
-    'downquark': 'enp0s25'
+    'downquark': 'em0'
 }
 
 # config
