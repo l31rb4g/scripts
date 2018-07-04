@@ -1,8 +1,8 @@
-#!/bin/bash
 
 while true; do
-    ssh -R 2222:localhost:22 paladino.pro
-    echo '>>> Tunnel closed, retrying...'
-    sleep 3
+    echo '>>> Opening tunnel on port 2222'
+    ssh -R 0.0.0.0:2222:localhost:22 paladino.pro
+    echo -e '\n>>> Connection closed, retrying in 2 seconds...'
+    sleep 2
 done
 
