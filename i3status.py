@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/python
 import os
 import sys
 import json
@@ -9,7 +9,7 @@ from subprocess import check_output
 
 # network devices
 network_devices = {
-    'acapulco': 'em0',
+    'acapulco': 'eno1',
     'downquark': 'em0'
 }
 
@@ -59,14 +59,14 @@ while True:
     
     # CPU USAGE
     # cpu_cores = 4
-    #cpu_cores = 8
-    #cpu_usage = shell("cat /proc/loadavg | sed 's/\([^ ]\+\).*/\\1/g'")
-    #cpu_usage = str(round(float(cpu_usage) * (100 / cpu_cores))) + '%'
+    cpu_cores = 8
+    cpu_usage = shell("cat /proc/loadavg | sed 's/\([^ ]\+\).*/\\1/g'")
+    cpu_usage = str(round(float(cpu_usage) * (100 / cpu_cores))) + '%'
     
     # MEMORY USAGE
-    #meminfo = shell("free -m | grep Mem | sed -e 's/Mem: \+\([^ ]\+\) \+\([^ ]\+\).*/\\2\/\\1/g'")
-    #meminfo = meminfo.split('/')
-    #meminfo = str(round(int(meminfo[0]) / int(meminfo[1]) * 100)) + '%'
+    meminfo = shell("free -m | grep Mem | sed -e 's/Mem: \+\([^ ]\+\) \+\([^ ]\+\).*/\\2\/\\1/g'")
+    meminfo = meminfo.split('/')
+    meminfo = str(round(int(meminfo[0]) / int(meminfo[1]) * 100)) + '%'
     
     # DISK SPACE
     # size = shell('df -h /storage | grep sdb')
@@ -77,15 +77,15 @@ while True:
     # storage_used = '{} used, '.format(size[4])
     # storage_free = '{} free'.format(size[3])
     
-    #size = shell('df -h /home | grep sda')
-    #while '  ' in size:
-    #    size = size.replace('  ', ' ')
-    #size = size.split(' ')
-    #home_dev = size[5] + ' '
-    #home_used = '{} used, '.format(size[4])
-    #home_free = '{} free'.format(size[3])
+    size = shell('df -h /home | grep sda')
+    while '  ' in size:
+       size = size.replace('  ', ' ')
+    size = size.split(' ')
+    home_dev = size[5] + ' '
+    home_used = '{} used, '.format(size[4])
+    home_free = '{} free'.format(size[3])
 
-    size = shell('df -h / | grep ada')
+    size = shell('df -h / | grep sda')
     while '  ' in size:
         size = size.replace('  ', ' ')
     size = size.split(' ')
@@ -106,21 +106,21 @@ while True:
         volume = 'muted'
 
     data = [
-        #block('CPU ' + cpu_usage, color='#ff3333'),
-        #separator,
+        block('CPU ' + cpu_usage, color='#ff3333'),
+        separator,
 
-        #block('MEM ' + meminfo, color='#ff6600'),
-        #separator,
+        block('MEM ' + meminfo, color='#ff6600'),
+        separator,
 
         # block(storage_dev, color='#ffff66'),
         # block(storage_used, color='#cccccc'),
         # block(storage_free, color='#00FF00'),
         # separator,
 
-        #block(home_dev, color='#ffff66'),
-        #block(home_used, color='#cccccc'),
-        #block(home_free, color='#00FF00'),
-        #separator,
+        block(home_dev, color='#ffff66'),
+        block(home_used, color='#cccccc'),
+        block(home_free, color='#00FF00'),
+        separator,
 
         block(root_dev, color='#ffff66'),
         block(root_used, color='#cccccc'),
