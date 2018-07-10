@@ -97,12 +97,17 @@ while True:
     ip = shell("ifconfig " + config['device'] + " | grep broadcast | sed 's/inet \([0-9.]*\) .*/\\1/'")
 
     # VOLUME
-    mute_file = '/tmp/mixer.muted'
-    volume = shell('mixer vol | sed -e "s/.*:\([0-9]\)/\\1/g"') + '%'
-    is_mute = ''
-    if os.path.isfile(mute_file):
-        is_mute = shell("cat " + mute_file)
-    if is_mute != '':
+    # mute_file = '/tmp/mixer.muted'
+    # volume = shell('mixer vol | sed -e "s/.*:\([0-9]\)/\\1/g"') + '%'
+    # is_mute = ''
+    # if os.path.isfile(mute_file):
+        # is_mute = shell("cat " + mute_file)
+    # if is_mute != '':
+        # volume = 'muted'
+
+    volume = shell("pactl list sinks| grep Volume | grep -v 'Base Volume' | sed 's/.* \([0-9]\+\)%.*/\\1/'") + '%'
+    is_mute = shell("pactl list sinks | grep Mute")
+    if 'yes' in is_mute:
         volume = 'muted'
 
     data = [

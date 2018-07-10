@@ -1,5 +1,5 @@
 #!/bin/bash
 
-URL=$(xclip -o)
+URL=$(xclip -o -selection clipboard)
 you-get -p vlc $URL
 
