@@ -10,7 +10,7 @@ def run_ctags(exclude_dir):
         'rm -rf .tox',
         'rm tags',
         #'ctags -R --exclude={} $VIRTUAL_ENV/'.format(exclude_dir),
-        'ctags -R $VIRTUAL_ENV/'.format(exclude_dir),
+        'ctags -R $VIRTUAL_ENV/',
         'ctags -R --exclude=.tox -a -o tags .'
     ]
 
