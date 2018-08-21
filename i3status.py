@@ -10,7 +10,7 @@ from subprocess import check_output
 # network devices
 network_devices = {
     'acapulco': 'eno1',
-    'downquark': 'enp0s25'
+    'downquark': 'em0'
 }
 
 # config
@@ -56,26 +56,30 @@ while True:
     if not first:
         _print(',', end='')
     first = False
-
-    cpu_cores = 4
+    
+    # CPU USAGE
+    # cpu_cores = 4
+    cpu_cores = 8
     cpu_usage = shell("cat /proc/loadavg | sed 's/\([^ ]\+\).*/\\1/g'")
     cpu_usage = str(round(float(cpu_usage) * (100 / cpu_cores))) + '%'
-
+    
+    # MEMORY USAGE
     meminfo = shell("free -m | grep Mem | sed -e 's/Mem: \+\([^ ]\+\) \+\([^ ]\+\).*/\\2\/\\1/g'")
     meminfo = meminfo.split('/')
     meminfo = str(round(int(meminfo[0]) / int(meminfo[1]) * 100)) + '%'
     
-    size = shell('df -h /storage | grep sdb')
-    while '  ' in size:
-        size = size.replace('  ', ' ')
-    size = size.split(' ')
-    storage_dev = size[5] + ' '
-    storage_used = '{} used, '.format(size[4])
-    storage_free = '{} free'.format(size[3])
-
+    # DISK SPACE
+    # size = shell('df -h /storage | grep sdb')
+    # while '  ' in size:
+        # size = size.replace('  ', ' ')
+    # size = size.split(' ')
+    # storage_dev = size[5] + ' '
+    # storage_used = '{} used, '.format(size[4])
+    # storage_free = '{} free'.format(size[3])
+    
     size = shell('df -h /home | grep sda')
     while '  ' in size:
-        size = size.replace('  ', ' ')
+       size = size.replace('  ', ' ')
     size = size.split(' ')
     home_dev = size[5] + ' '
     home_used = '{} used, '.format(size[4])
@@ -88,8 +92,18 @@ while True:
     root_dev = size[5] + ' '
     root_used = '{} used, '.format(size[4])
     root_free = '{} free'.format(size[3])
+    
+    # NETWORK ADDRESS
+    ip = shell("ifconfig " + config['device'] + " | grep broadcast | sed 's/inet \([0-9.]*\) .*/\\1/'")
 
-    ip = shell("ifconfig " + config['device'] + " | grep broadcast | sed 's/ \+inet \([0-9.]\+\) .*/\\1/'")
+    # VOLUME
+    # mute_file = '/tmp/mixer.muted'
+    # volume = shell('mixer vol | sed -e "s/.*:\([0-9]\)/\\1/g"') + '%'
+    # is_mute = ''
+    # if os.path.isfile(mute_file):
+        # is_mute = shell("cat " + mute_file)
+    # if is_mute != '':
+        # volume = 'muted'
 
     volume = shell("pactl list sinks| grep Volume | grep -v 'Base Volume' | sed 's/.* \([0-9]\+\)%.*/\\1/'") + '%'
     is_mute = shell("pactl list sinks | grep Mute")

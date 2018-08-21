@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #xdotool key "control+shift+e"
-urxvt &
+xterm &
 #xdotool type 'ag --hidden --pager "less -r" "'$1'"'
 #xdotool key KP_Enter
 sleep 0.5
@@ -12,7 +12,9 @@ pid=$(ps au --sort=-start_time | grep bash | grep -v grep | head -n 2 | tail -n 
 if [ $pid ]; then
     fd="/proc/$pid/fd/0"
     clear
-    echo "Searching for $1" > $fd
+    echo -e "\n=================================" > $fd
+    echo -e "Searching for \e[30;43m$1\e[m" > $fd
+    echo -e "=================================" > $fd
     echo "" > $fd
     (ag --hidden --ignore tags "$1" > $fd)& 
 fi
