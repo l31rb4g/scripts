@@ -69,13 +69,13 @@ while True:
     meminfo = str(round(int(meminfo[0]) / int(meminfo[1]) * 100)) + '%'
     
     # DISK SPACE
-    # size = shell('df -h /storage | grep sdb')
-    # while '  ' in size:
-        # size = size.replace('  ', ' ')
-    # size = size.split(' ')
-    # storage_dev = size[5] + ' '
-    # storage_used = '{} used, '.format(size[4])
-    # storage_free = '{} free'.format(size[3])
+    size = shell('df -h /storage | grep sdb')
+    while '  ' in size:
+        size = size.replace('  ', ' ')
+    size = size.split(' ')
+    storage_dev = size[5] + ' '
+    storage_used = '{} used, '.format(size[4])
+    storage_free = '{} free'.format(size[3])
     
     size = shell('df -h /home | grep sda')
     while '  ' in size:
