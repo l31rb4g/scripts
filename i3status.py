@@ -7,10 +7,11 @@ from datetime import datetime
 from subprocess import check_output
 
 
+is_vertical = '--vertical' in sys.argv
+
 # network devices
 network_devices = {
-    'acapulco': 'eno1',
-    'downquark': 'em0'
+    'downquark': 'enp0s25'
 }
 
 # config
@@ -69,22 +70,34 @@ while True:
     meminfo = str(round(int(meminfo[0]) / int(meminfo[1]) * 100)) + '%'
     
     # DISK SPACE
-    size = shell('df -h /storage | grep sdb')
+    # storage
+    size = shell('df -h /storage | grep storage')
     while '  ' in size:
         size = size.replace('  ', ' ')
     size = size.split(' ')
     storage_dev = size[5] + ' '
     storage_used = '{} used, '.format(size[4])
     storage_free = '{} free'.format(size[3])
+
+    # docker
+    size = shell('df -h /docker | grep docker')
+    while '  ' in size:
+        size = size.replace('  ', ' ')
+    size = size.split(' ')
+    docker_dev = size[5] + ' '
+    docker_used = '{} used, '.format(size[4])
+    docker_free = '{} free'.format(size[3])
     
-    size = shell('df -h /home | grep sda')
+    # home
+    size = shell('df -h /home | grep home')
     while '  ' in size:
        size = size.replace('  ', ' ')
     size = size.split(' ')
     home_dev = size[5] + ' '
     home_used = '{} used, '.format(size[4])
     home_free = '{} free'.format(size[3])
-
+    
+    # root
     size = shell('df -h / | grep sda')
     while '  ' in size:
         size = size.replace('  ', ' ')
@@ -115,13 +128,23 @@ while True:
         separator,
 
         block('MEM ' + meminfo, color='#ff6600'),
-        separator,
+        separator
+    ]
 
-        block(storage_dev, color='#cccccc'),
-        block(storage_used, color='#ffff66'),
-        block(storage_free, color='#00FF00'),
-        separator,
+    if not is_vertical:
+        data += [
+            block(storage_dev, color='#cccccc'),
+            block(storage_used, color='#ffff66'),
+            block(storage_free, color='#00FF00'),
+            separator,
 
+            block(docker_dev, color='#cccccc'),
+            block(docker_used, color='#ffff66'),
+            block(docker_free, color='#00FF00'),
+            separator,
+        ]
+
+    data += [
         block(home_dev, color='#cccccc'),
         block(home_used, color='#ffff66'),
         block(home_free, color='#00FF00'),

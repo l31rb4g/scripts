@@ -4,7 +4,7 @@
 xterm &
 #xdotool type 'ag --hidden --pager "less -r" "'$1'"'
 #xdotool key KP_Enter
-sleep 0.5
+sleep 1
 
 pid=$(ps au --sort=-start_time | grep bash | grep -v grep | head -n 2 | tail -n 1 | sed 's/ \+/ /g' | cut -d ' ' -f 2)
 #echo 'PID: '$pid
