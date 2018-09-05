@@ -79,6 +79,15 @@ while True:
     storage_used = '{} used, '.format(size[4])
     storage_free = '{} free'.format(size[3])
 
+    # vm
+    size = shell('df -h /vm | grep vm')
+    while '  ' in size:
+        size = size.replace('  ', ' ')
+    size = size.split(' ')
+    vm_dev = size[5] + ' '
+    vm_used = '{} used, '.format(size[4])
+    vm_free = '{} free'.format(size[3])
+    
     # docker
     size = shell('df -h /docker | grep docker')
     while '  ' in size:
@@ -87,7 +96,7 @@ while True:
     docker_dev = size[5] + ' '
     docker_used = '{} used, '.format(size[4])
     docker_free = '{} free'.format(size[3])
-    
+
     # home
     size = shell('df -h /home | grep home')
     while '  ' in size:
@@ -136,6 +145,11 @@ while True:
             block(storage_dev, color='#cccccc'),
             block(storage_used, color='#ffff66'),
             block(storage_free, color='#00FF00'),
+            separator,
+
+            block(vm_dev, color='#cccccc'),
+            block(vm_used, color='#ffff66'),
+            block(vm_free, color='#00FF00'),
             separator,
 
             block(docker_dev, color='#cccccc'),
