@@ -5,13 +5,14 @@ from subprocess import call
 
 
 def run_ctags(exclude_dir):
+    
+    if os.path.isfile('tags'):
+        os.remove('tags')
 
     cmds = [
-        'rm -rf .tox',
-        'rm tags',
-        #'ctags -R --exclude={} $VIRTUAL_ENV/'.format(exclude_dir),
-        'ctags -R $VIRTUAL_ENV/',
-        'ctags -R --exclude=.tox --exclude=build/lib -a -o tags .'
+        # 'ctags -R $VIRTUAL_ENV/',
+        # 'ctags -R --exclude=.tox --exclude=build/lib -a -o tags .'
+        'ctags -R .'
     ]
 
     for cmd in cmds:
