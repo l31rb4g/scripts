@@ -56,7 +56,7 @@ echo ">>> Please set ROOT password"
 arch-chroot /mnt passwd
 
 arch-chroot /mnt pacman -Syu
-arch-chroot /mnt pacman -s grub
+arch-chroot /mnt pacman -S grub --noconfirm
 arch-chroot /mnt grub-install /dev/sda
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
