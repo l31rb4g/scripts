@@ -6,6 +6,8 @@ cfdisk
 
 DEFAULT_PARTITION='/dev/sda1'
 
+umount /mnt > /dev/null 2>&1
+
 echo "###################################################################"
 echo -n " Please inform the partition to install ("$DEFAULT_PARTITION"): "
 read PARTITION
