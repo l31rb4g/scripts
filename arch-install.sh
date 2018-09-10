@@ -55,6 +55,11 @@ arch-chroot /mnt echo "127.0.1.1		"$HOSTNAME".localdomain "$HOSTNAME >> /etc/hos
 echo ">>> Please set ROOT password"
 arch-chroot /mnt passwd
 
+arch-chroot /mnt pacman -Syu
+arch-chroot /mnt pacman -s grub
+arch-chroot /mnt grub-install /dev/sda
+arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+
 echo "INSTALLATION DONE!"
 echo "Press ENTER to reboot"
 read
