@@ -48,6 +48,13 @@ def shell(cmd):
     output = output.decode().strip()
     return output
 
+def timebox():
+    timebox_file = '/tmp/timebox'
+    r = None
+    if os.path.isfile(timebox_file):
+        with open(timebox_file) as f:
+            r = f.read()
+    return r
 
 _print('{"version":1}')
 _print('[')
@@ -80,13 +87,13 @@ while True:
     storage_free = '{} free'.format(size[3])
 
     # storage2
-    size = shell('df -h /storage2 | grep storage2')
-    while '  ' in size:
-        size = size.replace('  ', ' ')
-    size = size.split(' ')
-    storage2_dev = size[5] + ' '
-    storage2_used = '{} used, '.format(size[4])
-    storage2_free = '{} free'.format(size[3])
+    # size = shell('df -h /storage2 | grep storage2')
+    # while '  ' in size:
+        # size = size.replace('  ', ' ')
+    # size = size.split(' ')
+    # storage2_dev = size[5] + ' '
+    # storage2_used = '{} used, '.format(size[4])
+    # storage2_free = '{} free'.format(size[3])
     
     # docker
     size = shell('df -h /docker | grep docker')
@@ -147,10 +154,10 @@ while True:
             block(storage_free, color='#00FF00'),
             separator,
 
-            block(storage2_dev, color='#cccccc'),
-            block(storage2_used, color='#ffff66'),
-            block(storage2_free, color='#00FF00'),
-            separator,
+            # block(storage2_dev, color='#cccccc'),
+            # block(storage2_used, color='#ffff66'),
+            # block(storage2_free, color='#00FF00'),
+            # separator,
 
             block(docker_dev, color='#cccccc'),
             block(docker_used, color='#ffff66'),
@@ -177,7 +184,14 @@ while True:
 
         block(datetime.now().strftime('%d/%m/%Y'), color='#bbbbbb'),
         separator,
+    ]
 
+    tb = timebox()
+    if tb:
+        data += [block('TIMEBOX: {}'.format(tb), color='#ff6666'), separator]
+
+
+    data += [
         block('<span font_weight="bold">' + datetime.now().strftime('%H:%M') + '</span>')
     ]
     _print(json.dumps(data))
