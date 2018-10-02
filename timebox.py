@@ -23,6 +23,7 @@ def cancel():
 if len(sys.argv) > 1:
     if sys.argv[1] == '--cancel':
         cancel()
+        call(['killall', 'timebox'])
         sys.exit()
 
     time = int(sys.argv[1])
