@@ -21,7 +21,11 @@ def cancel():
         os.remove(TMP_FILE)
 
 if len(sys.argv) > 1:
+    if sys.argv[1] == '--cancel':
+        return cancel()
+
     time = int(sys.argv[1])
+
 else:
     time = int(shell(['zenity', '--entry',
                       '--text=Digite o tempo (em minutos):',
