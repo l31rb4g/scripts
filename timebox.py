@@ -6,6 +6,7 @@ from subprocess import check_output, call
 
 SOUND = '/home/l31rb4g/fire_pager.mp3'
 TMP_FILE = '/tmp/timebox'
+DEFAULT_TIME = 15
 DEBUG = False
 
 def shell(cmd:list):
@@ -32,7 +33,7 @@ else:
     time = int(shell(['zenity', '--entry',
                       '--text=Digite o tempo (em minutos):',
                       '--title=Timebox',
-                      '--entry-text=10']))
+                      '--entry-text=' + str(DEFAULT_TIME)]))
 
 s = '' if time == 1 else 's'
 debug('Timebox iniciado com duração de {} minuto{}.'.format(time, s))
