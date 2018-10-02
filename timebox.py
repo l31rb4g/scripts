@@ -22,7 +22,8 @@ def cancel():
 
 if len(sys.argv) > 1:
     if sys.argv[1] == '--cancel':
-        return cancel()
+        cancel()
+        sys.exit()
 
     time = int(sys.argv[1])
 
