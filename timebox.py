@@ -21,19 +21,36 @@ def cancel():
     if os.path.isfile(TMP_FILE):
         os.remove(TMP_FILE)
 
+def kill():
+    call(['killall', 'timebox'])
+
+
+
+
+
 if len(sys.argv) > 1:
     if sys.argv[1] == '--cancel':
+        kill()
         cancel()
-        call(['killall', 'timebox'])
         sys.exit()
 
     time = int(sys.argv[1])
 
 else:
-    time = int(shell(['zenity', '--entry',
+    time = shell(['zenity', '--entry',
                       '--text=Digite o tempo (em minutos):',
                       '--title=Timebox',
-                      '--entry-text=' + str(DEFAULT_TIME)]))
+                      '--entry-text=' + str(DEFAULT_TIME)])
+    if time in ['c', 'cancel']:
+        kill()
+        cancel()
+        sys.exit()
+    else:
+        time = int(time)
+
+
+kill()
+cancel()
 
 s = '' if time == 1 else 's'
 debug('Timebox iniciado com duração de {} minuto{}.'.format(time, s))
