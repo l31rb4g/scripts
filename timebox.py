@@ -33,8 +33,8 @@ def kill():
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] == '--cancel':
-            kill()
             cancel()
+            kill()
             sys.exit()
 
         time = int(sys.argv[1])
@@ -44,9 +44,11 @@ if __name__ == '__main__':
                           '--text=Digite o tempo (em minutos):',
                           '--title=Timebox',
                           '--entry-text=' + str(DEFAULT_TIME)])
+        print(time)
         if time in ['c', 'cancel']:
-            kill()
+            print('kill')
             cancel()
+            kill()
             sys.exit()
         else:
             time = int(time)
