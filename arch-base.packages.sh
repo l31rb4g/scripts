@@ -1,1 +1,1 @@
-pacman -S vim htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu
+pacman -S vim htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-340xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g

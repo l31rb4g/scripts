@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ $(whoami) != "root" ]; then
+    echo 'Must be run as root'
+    exit 1
+fi
+
 loadkeys br-abnt2
 timedatectl set-ntp true
 cfdisk

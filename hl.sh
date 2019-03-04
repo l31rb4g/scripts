@@ -1,8 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env python
+import sys
 
-Q=$1
+query = sys.argv[1]
 
-while read line; do
-    echo "$line" | grep --color "$Q\|$"
-done
+for line in sys.stdin:
+    newline = line.strip('\n')
+    newline = newline.replace(query, '\033[1;33m{}\033[m'.format(query))
+    print(newline)
 
