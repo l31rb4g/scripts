@@ -6,9 +6,12 @@
 #libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev \
 #python3-dev ruby-dev lua5.1 liblua5.1-dev libperl-dev git
 
+sudo pacman -Rns --noconfirm vim
+
 cd /tmp
 git clone https://github.com/vim/vim.git
 cd vim
+
 ./configure --with-features=huge \
             --enable-multibyte \
      --enable-rubyinterp=yes \

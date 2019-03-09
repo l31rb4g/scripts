@@ -1,5 +1,9 @@
 #!/bin/bash
 
+ROOT_DEVICE='/dev/sda1'
+SWAP_DEVICE='/dev/sda2'
+
+
 if [ $(whoami) != "root" ]; then
     echo 'Must be run as root'
     exit 1
@@ -9,16 +13,15 @@ loadkeys br-abnt2
 timedatectl set-ntp true
 cfdisk
 
-DEFAULT_PARTITION='/dev/sda1'
 
 umount /mnt > /dev/null 2>&1
 
 echo "###################################################################"
-echo -n " Please inform the partition to install ("$DEFAULT_PARTITION"): "
+echo -n " Please inform the partition to install ("$ROOT_DEVICE"): "
 read PARTITION
 
 if [[ "$PARTITION" == "" ]]; then
-	PARTITION=$DEFAULT_PARTITION
+	PARTITION=$ROOT_DEVICE
 fi
 
 echo " PARTITION SELECTED:" $PARTITION
@@ -37,20 +40,27 @@ fi
 
 mkfs.ext4 $PARTITION
 
-# mkswap /dev/sda3
-# swapon /dev/sda3
+mkswap /dev/sda2
+swapon /dev/sda2
 
 mount $PARTITION /mnt
-#other mounts
 
-pacstrap /mnt base
+#other mounts
+mkdir /mnt/docker
+mount /dev/sdb1 /mnt/docker
+mkdir /mnt/storage
+mount /dev/sdc1 /mnt/storage
+
+time pacstrap /mnt base
 genfstab -U /mnt >> /mnt/etc/fstab
 
+echo ""
 echo -n ">>> Please inform the hostname: "
 read HOSTNAME
 
 arch-chroot /mnt ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
 arch-chroot /mnt hwclock --systohc
+arch-chroot /mnt echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen
 arch-chroot /mnt locale-gen
 arch-chroot /mnt echo "LANG=en_US.UTF-8" > /etc/locale.conf
 arch-chroot /mnt echo "KEYMAP=br-abnt2" > /etc/vconsole.conf
@@ -64,7 +74,7 @@ arch-chroot /mnt passwd
 
 arch-chroot /mnt pacman -Syu
 arch-chroot /mnt pacman -S grub --noconfirm
-arch-chroot /mnt grub-install /dev/sda
+arch-chroot /mnt grub-install --target=i386-pc --recheck /dev/sda
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
 echo "INSTALLATION DONE!"
