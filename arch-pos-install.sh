@@ -3,7 +3,7 @@ HOME_DEVICE='/dev/sdd1'
 
 pacman -Syu --noconfirm
 
-pacman -S --noconfirm vim htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-340xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g
+pacman -S --noconfirm vim htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-340xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g gconf
 
 pacman -S --noconfirm noto-fonts ttf-roboto ttf-inconsolata
 
@@ -35,15 +35,6 @@ ln -s /home/l31rb4g/config/10-monitor.conf /etc/X11/xorg.conf.d
 # git clone https://aur.archlinux.org/steam-fonts.git 
 # cd steam-fonts
 # sudo -u l31rb4g makepkg -si --noconfirm
-
-cd /tmp
-git clone https://aur.archlinux.org/sencha-cmd-6.git
-cd sencha-cmd-6
-sudo -u l31rb4g makepkg -si --noconfirm
-cd /tmp
-git clone https://aur.archlinux.org/rambox.git
-cd rambox
-sudo -u l31rb4g makepkg -si --noconfirm
 
 echo -e '\nAll set! Now log in using your username: '$_user
 
