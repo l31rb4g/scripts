@@ -3,7 +3,7 @@ HOME_DEVICE='/dev/sdd1'
 
 pacman -Syu --noconfirm
 
-pacman -S --noconfirm vim htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-340xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g gconf
+pacman -S --noconfirm vim htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-340xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g gconf geany dolphin breeze-icons nfs-utils ctags okular cups the_silver_searcher
 
 pacman -S --noconfirm noto-fonts ttf-roboto ttf-inconsolata
 
@@ -21,10 +21,10 @@ mount -a
 
 ln -s /home/l31rb4g/config/10-monitor.conf /etc/X11/xorg.conf.d
 
+ln -s /storage/opt/rambox/rambox /usr/bin
 
 
-
-
+login l31rb4g
 
 # FOR USER
 
@@ -36,7 +36,15 @@ ln -s /home/l31rb4g/config/10-monitor.conf /etc/X11/xorg.conf.d
 # cd steam-fonts
 # sudo -u l31rb4g makepkg -si --noconfirm
 
-echo -e '\nAll set! Now log in using your username: '$_user
+
+cd /tmp
+git clone https://aur.archlinux.org/spotify.git
+cd steam-fonts
+makepkg -si --noconfirm
+
+exit
+
+echo -e '\n--------------\nAll set! Now log in using your username: '$_user
 
 exit
 
