@@ -32,21 +32,22 @@ cd ~/www
 mkdir $NAME
 cd $NAME
 mkvirtualenv $NAME -a .
-pip install django
+pip install django mysqlclient
 django-admin startproject $NAME .
 ./manage.py startapp core
+pip freeze > requirements.txt
 
 sed -i "s/'django.contrib.staticfiles',\
     /'django.contrib.staticfiles',\n    'core',/g" $NAME/settings.py
 
 sed -i "s/django.db.backends.sqlite3/django.db.backends.mysql/" \
-    www/redemoinho/redemoinho/settings.py 
+    $NAME/settings.py 
 
-sed "s/'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),/'NAME': '$NAME',\
+sed -i "s/'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),/'NAME': '$NAME',\
     \n        'USER': '$NAME',\n        'PASSWORD': '123456'/" \
-    www/redemoinho/redemoinho/settings.py 
+    $NAME/settings.py 
 
-sudo mysql -e "CREATE DATABASE $NAME; CREATE USER '$NAME'@'localhost' IDENTIFIED BY '123456';"
+sudo mysql -e "CREATE DATABASE $NAME; CREATE USER $NAME@localhost IDENTIFIED BY '123456'; GRANT ALL ON $NAME.* to $NAME@localhost"
 
 ./manage.py makemigrations
 ./manage.py migrate
