@@ -16,7 +16,7 @@ network_devices = {
 
 # config
 config = {
-    'interval': 0.5,
+    'interval': 1,
     'separator': ' | ',
     'device': network_devices[os.uname().nodename],
 }
@@ -96,13 +96,13 @@ while True:
     # storage2_free = '{} free'.format(size[3])
     
     # docker
-    size = shell('df -h /docker | grep docker')
-    while '  ' in size:
-        size = size.replace('  ', ' ')
-    size = size.split(' ')
-    docker_dev = size[5] + ' '
-    docker_used = '{} used, '.format(size[4])
-    docker_free = '{} free'.format(size[3])
+    #size = shell('df -h /docker | grep docker')
+    #while '  ' in size:
+    #    size = size.replace('  ', ' ')
+    #size = size.split(' ')
+    #docker_dev = size[5] + ' '
+    #docker_used = '{} used, '.format(size[4])
+    #docker_free = '{} free'.format(size[3])
 
     # home
     size = shell('df -h /home | grep home')
@@ -159,10 +159,10 @@ while True:
             # block(storage2_free, color='#00FF00'),
             # separator,
 
-            block(docker_dev, color='#cccccc'),
-            block(docker_used, color='#ffff66'),
-            block(docker_free, color='#00FF00'),
-            separator,
+            #block(docker_dev, color='#cccccc'),
+            #block(docker_used, color='#ffff66'),
+            #block(docker_free, color='#00FF00'),
+            #separator,
         ]
 
     data += [

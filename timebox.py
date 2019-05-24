@@ -4,9 +4,9 @@ import sys
 from time import sleep, strftime
 from subprocess import check_output, call
 
-SOUND = '/home/l31rb4g/fire_pager.mp3'
+SOUND = '/home/l31rb4g/timebox.mp3'
 TMP_FILE = '/tmp/timebox'
-DEFAULT_TIME = 15
+DEFAULT_TIME = 5
 DEBUG = False
 
 
