@@ -1,12 +1,21 @@
 #!/bin/bash
 
-HOSTNAME='downquark'
+# Instructions:
+#   1. Boot Arch Linux flashdrive
+#   2. Create /media and mount home partition. Do not use /mnt
+#   3. Check TARGET_DISK variable
+#   4. Run this script
 
-ROOT_DEVICE='/dev/sda1'
+
+TARGET_DISK='/dev/sdb'
+
+ROOT_DEVICE=$TARGET_DISK'1'
+SWAP_DEVICE=$TARGET_DISK'2'
+
 HOME_DEVICE='/dev/sdd1'
-DOCKER_DEVICE='/dev/sdb1'
 STORAGE_DEVICE='/dev/sdc1'
-SWAP_DEVICE='/dev/sda2'
+
+HOSTNAME='downquark'
 
 
 if [ $(whoami) != "root" ]; then
@@ -18,7 +27,7 @@ fi
 # initial config
 loadkeys br-abnt2
 timedatectl set-ntp true
-cfdisk
+cfdisk $TARGET_DISK
 
 umount /mnt > /dev/null 2>&1
 
@@ -38,9 +47,6 @@ swapon $SWAP_DEVICE
 
 mount $PARTITION /mnt
 
-mkdir /mnt/docker
-mount $DOCKER_DEVICE /mnt/docker
-
 mkdir /mnt/storage
 mount $STORAGE_DEVICE /mnt/storage
 
@@ -49,7 +55,8 @@ mount $HOME_DEVICE /mnt/home
 
 
 # pacstrap
-
+pacman -Syu --noconfirm reflector
+reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
 time pacstrap /mnt base
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -85,8 +92,13 @@ arch-chroot /mnt grub-install --target=i386-pc --recheck /dev/sda
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
 
+# reflector
+arch-chroot /mnt pacman -Syu --noconfirm reflector
+arch-chroot /mnt reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
+
+
 # main install
-arch-chroot /mnt pacman -S --noconfirm htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-340xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g gconf geany dolphin breeze-icons nfs-utils ctags okular cups the_silver_searcher gitg tig docker jdk8-openjdk wine jq zenity
+arch-chroot /mnt pacman -S --noconfirm htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-390xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g gconf geany dolphin breeze-icons nfs-utils ctags okular cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient wine sassc zip
 
 
 # fonts
@@ -95,16 +107,21 @@ arch-chroot /mnt pacman -S --noconfirm noto-fonts ttf-roboto ttf-inconsolata
 
 # links
 arch-chroot /mnt ln -s /home/l31rb4g/config/10-monitor.conf /etc/X11/xorg.conf.d
-arch-chroot /mnt ln -s /home/l31rb4g/config/aur.sh /usr/bin/aur
-arch-chroot /mnt ln -s /storage/opt/rambox/rambox /usr/bin
-arch-chroot /mnt ln -s /storage/opt/workbench/Workbench-Build124/run.sh /usr/bin/workbench
+arch-chroot /mnt ln -s /home/l31rb4g/scripts/aur.sh /usr/bin/aur
+arch-chroot /mnt ln -s /home/l31rb4g/scripts/heidisql.sh /usr/bin/heidisql
+
+
+# aur, extra
+#arch-chroot /mnt aur https://aur.archlinux.org/sencha-cmd-6.git
+#arch-chroot /mnt aur https://aur.archlinux.org/rambox.git
 
 
 # services
 arch-chroot /mnt systemctl enable dhcpcd
+arch-chroot /mnt systemctl enable docker
 
 
-# sudo config
+# sudo
 arch-chroot /mnt usermod -aG wheel l31rb4g
 arch-chroot /mnt sh -c 'echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers'
 
@@ -155,7 +172,7 @@ arch-chroot /mnt sudo pacman -Syu --noconfirm
 
 
 # steam
-arch-chroot /mnt pacman -S --noconfirm steam lib32-nvidia-340xx-utils lib32-libdrm
+arch-chroot /mnt pacman -S --noconfirm steam lib32-nvidia-390xx-utils lib32-libdrm
 arch-chroot /mnt aur https://aur.archlinux.org/steam-fonts.git
 
 
