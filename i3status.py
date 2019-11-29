@@ -114,7 +114,7 @@ while True:
     home_free = '{} free'.format(size[3])
     
     # root
-    size = shell('df -h / | grep sda')
+    size = shell('df -h / | grep sd')
     while '  ' in size:
         size = size.replace('  ', ' ')
     size = size.split(' ')
