@@ -10,7 +10,7 @@ VIDEO_BASE=~/chroma-videos/eiffel.mp4
 COLOR='64CF6C' # novo verde
 COLOR='00FF00'
 
-SIMILARITY='0.6'
+SIMILARITY='0.65'
 BLEND='0.1'
 
 
