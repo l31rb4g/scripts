@@ -18,7 +18,7 @@ ffmpeg -y \
     -stream_loop -1 \
     -i $VIDEO_BASE \
     -i $CAMERA \
-    -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation=1.7[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
+    -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation=1.5[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
     -map '[out]' \
     -f v4l2 \
     $DUMMY
