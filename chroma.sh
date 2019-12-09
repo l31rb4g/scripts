@@ -2,7 +2,7 @@
 
 CAMERA='/dev/video0'
 DUMMY='/dev/video2'
-VIDEO_BASE=~/chroma-videos/eiffel.mp4
+VIDEO_BASE=~/chroma-videos/escritorio2.mp4
 
 #COLOR='7ACFAE' # com luz
 #COLOR='95B6A1' # sem luz
