@@ -2,7 +2,7 @@
 
 # Instructions:
 #   1. Boot Arch Linux flashdrive
-#   2. Create /media and mount home partition. Do not use /mnt
+#   2. Mount home on /mnt
 #   3. Check TARGET_DISK variable
 #   4. Run this script
 
@@ -11,14 +11,8 @@ TARGET_DISK='/dev/sda'
 
 ROOT_PARTITION=$TARGET_DISK'1'
 SWAP_PARTITION=$TARGET_DISK'2'
-
 HOME_PARTITION='/dev/sdb1'
 STORAGE_PARTITION='/dev/sdc1'
-
-UUID_ROOT='b9c9325b-5462-465f-bac5-a471b6bc6ade'
-UUID_SWAP='b1c14edb-a34d-4fc0-879e-9d500e617dea'
-UUID_HOME='ebbe4f00-8115-4dc8-9728-566adac3c6cb'
-UUID_STORAGE='38586AAE586A6A98'
 
 HOSTNAME='downquark'
 
@@ -29,171 +23,209 @@ if [ $(whoami) != "root" ]; then
 fi
 
 
-# initial config
-loadkeys br-abnt2
-timedatectl set-ntp true
-
-#cfdisk $TARGET_DISK
-
-umount /mnt > /dev/null 2>&1
-
-PARTITION=$ROOT_PARTITION
+function line {
+    echo "###################################################################"
+}
 
 
-echo "###################################################################"
-echo " SYSTEM WILL BE REINSTALLED ON "$PARTITION
-echo "###################################################################"
+STEPS=9
 
 
-# mounts
-mkfs.ext4 $PARTITION
+if [ "$1" == "" ]; then
 
-mkswap $SWAP_PARTITION
-swapon $SWAP_PARTITION
+	line
+	echo '# [1/'$STEPS'] Initial config'
+	line
 
-mount $PARTITION /mnt
+	loadkeys br-abnt2
+	timedatectl set-ntp true
 
-mkdir /mnt/storage
-mount -U $UUID_STORAGE /mnt/storage
+	#cfdisk $TARGET_DISK
+	umount /_setup > /dev/null 2>&1
 
-mkdir /mnt/home
-mount -U $UUID_HOME /mnt/home
-
-
-# pacstrap
-#pacman -Syu --noconfirm
-#pacman -Syu --noconfirm reflector
-#reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
-time pacstrap /mnt base
-genfstab -U /mnt >> /mnt/etc/fstab
+	PARTITION=$ROOT_PARTITION
 
 
-# ARCH-CHROOT
-echo 'CHROOTING'
-echo 'PRESS ENTER TO CONTINUE...'
-read
-arch-chroot /mnt
+	line
+	echo '# [2/'$STEPS'] Formatting disk ('$PARTITION')'
+	line
+
+	# mounts
+	mkfs.ext4 $PARTITION
+	mkdir /_setup
+	mount $PARTITION /_setup
+
+	mkswap $SWAP_PARTITION
+	swapon $SWAP_PARTITION
 
 
-# timezone, hostname
-ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
-hwclock --systohc
-echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
-locale-gen
+	line
+	echo '# [3/'$STEPS'] Mounting home and storage'
+	line
 
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
-echo "KEYMAP=br-abnt2" > /etc/vconsole.conf
-echo '$HOSTNAME' > /etc/hostname
-echo "127.0.0.1		localhost" >> /etc/hosts
-echo "::1		    localhost" >> /etc/hosts
-echo "127.0.1.1		"'$HOSTNAME'".localdomain "'$HOSTNAME' >> /etc/hosts
+	mkdir /_setup/storage
+	mount -U $STORAGE_PARTITION /_setup/storage
+
+	mkdir /_setup/home
+	mount $HOME_PARTITION /_setup/home
 
 
-# root password
-echo -e "\n>>> Please set ROOT password"
-passwd
+	line
+	echo '# [4/'$STEPS'] Pacstrap'
+	line
+
+	#pacman -Syu --noconfirm
+	#pacman -Syu --noconfirm reflector
+	#reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
+	time pacstrap /_setup base
+	genfstab -U /_setup >> /_setup/etc/fstab
 
 
-# l31rb4g password
-echo -e "\n>>> Please set l31rb4g password"
-useradd -m l31rb4g
-passwd l31rb4g
+	line
+	echo '# [5/'$STEPS'] CH Rooting'
+	line
+	arch-chroot /_setup /home/l31rb4g/scripts/arch-install.sh chroot
+fi
 
 
-# grub
-pacman -Syu --noconfirm
-pacman -S grub --noconfirm
-grub-install --target=i386-pc --recheck /dev/sda
-grub-mkconfig -o /boot/grub/grub.cfg
+if [ "$1" == "chroot" ]; then
+
+	line
+	echo '# [6/'$STEPS'] Setting timezone'
+	line
+
+	# timezone, hostname
+	ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+	hwclock --systohc
+	echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+	locale-gen
+
+	echo "LANG=en_US.UTF-8" > /etc/locale.conf
+	echo "KEYMAP=br-abnt2" > /etc/vconsole.conf
+	echo $HOSTNAME > /etc/hostname
+	echo "127.0.0.1		localhost" >> /etc/hosts
+	echo "::1		    localhost" >> /etc/hosts
+	echo "127.0.1.1		"$HOSTNAME".localdomain "$HOSTNAME >> /etc/hosts
 
 
-# reflector
-pacman -Syu --noconfirm reflector
-reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
+	line
+	echo '# [7/'$STEPS'] Setting passwords'
+	line
+
+	# root password
+	echo -e "\n>>> Please set ROOT password"
+	passwd
 
 
-# main install
-pacman -S --noconfirm htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-390xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g gconf geany dolphin breeze-icons nfs-utils ctags okular cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient wine sassc zip
+	# l31rb4g password
+	echo -e "\n>>> Please set l31rb4g password"
+	useradd -m l31rb4g
+	passwd l31rb4g
 
 
-# fonts
-pacman -S --noconfirm noto-fonts ttf-roboto ttf-inconsolata
+	# grub
+	line
+	echo '# [8/'$STEPS'] Installing GRUB'
+	line
+
+	pacman -Syu --noconfirm
+	pacman -S grub --noconfirm
+	grub-install --target=i386-pc --recheck /dev/sda
+
+	grub-mkconfig
+        ls -la /boot
+	grub-mkconfig -o /boot/grub/grub.cfg
 
 
-# links
-ln -s /home/l31rb4g/config/10-monitor.conf /etc/X11/xorg.conf.d
-ln -s /home/l31rb4g/scripts/aur.sh /usr/bin/aur
-ln -s /home/l31rb4g/scripts/heidisql.sh /usr/bin/heidisql
+	# reflector
+	pacman -Syu --noconfirm reflector
+	reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
 
 
-# aur, extra
-#/mnt aur https://aur.archlinux.org/sencha-cmd-6.git
-#/mnt aur https://aur.archlinux.org/rambox.git
+	# main install
+	line
+	echo '# [9/'$STEPS'] Main system install'
+	line
+	pacman -S --noconfirm htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-390xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g gconf geany dolphin breeze-icons nfs-utils ctags okular cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip dhcpcd gpick wget
 
 
-# services
-systemctl enable dhcpcd
-systemctl enable docker
+	# fonts
+	pacman -S --noconfirm noto-fonts ttf-roboto ttf-inconsolata
 
 
-# sudo
-usermod -aG wheel l31rb4g
-sh -c 'echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers'
+	# links
+	ln -s /home/l31rb4g/config/10-monitor.conf /etc/X11/xorg.conf.d
+	ln -s /home/l31rb4g/scripts/aur.sh /usr/bin/aur
+	ln -s /home/l31rb4g/scripts/heidisql.sh /usr/bin/heidisql
+        ln -s /home/l31rb4g/opt/Rambox-0.7.2-linux-x64/rambox /usr/bin
 
 
-# docker
-usermod -aG docker l31rb4g
+	# services
+	systemctl enable dhcpcd
+	systemctl enable docker
 
 
-# vim
-old_pwd=$(pwd)
-cd /tmp
-git clone https://github.com/vim/vim.git
-cd vim
-
-./configure --with-features=huge \
-            --enable-multibyte \
-            --enable-rubyinterp=yes \
-            --enable-pythoninterp=yes \
-            --enable-python3interp=yes \
-            --enable-perlinterp=yes \
-            --enable-luainterp=yes \
-            --enable-gui=gtk2 \
-            --enable-cscope \
-            --with-x
-
-make
-sudo make install
-cd $old_pwd
+	# sudo
+	usermod -aG wheel l31rb4g
+	sh -c 'echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers'
 
 
-# floyd
-old_pwd=$(pwd)
-cd /tmp
-git clone https://github.com/l31rb4g/floyd.git
-cd floyd
-mkdir build
-cd build
-cmake ../src
-make
-sudo cp floyd /usr/bin
-cd $old_pwd
+	# docker
+	usermod -aG docker l31rb4g
 
 
-# multilib
-sudo sh -c 'echo "[multilib]" >> /etc/pacman.conf'
-sudo sh -c 'echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf'
-sudo pacman -Syu --noconfirm
+	# vim
+	old_pwd=$(pwd)
+	cd /tmp
+	git clone https://github.com/vim/vim.git
+	cd vim
+
+	./configure --with-features=huge \
+		    --enable-multibyte \
+		    --enable-rubyinterp=yes \
+		    --enable-pythoninterp=yes \
+		    --enable-python3interp=yes \
+		    --enable-perlinterp=yes \
+		    --enable-luainterp=yes \
+		    --enable-gui=gtk2 \
+		    --enable-cscope \
+		    --with-x
+
+	make
+	sudo make install
+	cd $old_pwd
 
 
-# steam
-pacman -S --noconfirm steam lib32-nvidia-390xx-utils lib32-libdrm
-aur https://aur.archlinux.org/steam-fonts.git
+	# floyd
+	old_pwd=$(pwd)
+	cd /tmp
+	git clone https://github.com/l31rb4g/floyd.git
+	cd floyd
+	mkdir build
+	cd build
+	cmake ../src
+	make
+	sudo cp floyd /usr/bin
+	cd $old_pwd
 
+
+	# multilib
+	sudo sh -c 'echo "[multilib]" >> /etc/pacman.conf'
+	sudo sh -c 'echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf'
+	sudo pacman -Syu --noconfirm
+
+
+	# steam
+	pacman -S --noconfirm steam lib32-nvidia-390xx-utils lib32-libdrm
+	sudo -u l31rb4g aur https://aur.archlinux.org/steam-fonts.git
+
+        exit
+
+fi
 
 
 # finish
-exit
+line
 echo "INSTALLATION DONE! REMOVE THE INSTALLATION MEDIA."
 echo "Press ENTER to reboot"
 read
