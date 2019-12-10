@@ -24,7 +24,7 @@ fi
 
 
 function line {
-    echo "###################################################################"
+    echo "#####################################################################"
 }
 
 
@@ -33,6 +33,7 @@ STEPS=9
 
 if [ "$1" == "" ]; then
 
+        echo
 	line
 	echo '# [1/'$STEPS'] Initial config'
 	line
@@ -45,7 +46,10 @@ if [ "$1" == "" ]; then
 
 	PARTITION=$ROOT_PARTITION
 
+        lsblk -f
 
+
+        echo
 	line
 	echo '# [2/'$STEPS'] Formatting disk ('$PARTITION')'
 	line
@@ -59,6 +63,7 @@ if [ "$1" == "" ]; then
 	swapon $SWAP_PARTITION
 
 
+        echo
 	line
 	echo '# [3/'$STEPS'] Mounting home and storage'
 	line
@@ -69,7 +74,10 @@ if [ "$1" == "" ]; then
 	mkdir /_setup/home
 	mount $HOME_PARTITION /_setup/home
 
+        mount
 
+
+        echo
 	line
 	echo '# [4/'$STEPS'] Pacstrap'
 	line
@@ -81,6 +89,7 @@ if [ "$1" == "" ]; then
 	genfstab -U /_setup >> /_setup/etc/fstab
 
 
+        echo
 	line
 	echo '# [5/'$STEPS'] CH Rooting'
 	line
@@ -90,6 +99,7 @@ fi
 
 if [ "$1" == "chroot" ]; then
 
+        echo
 	line
 	echo '# [6/'$STEPS'] Setting timezone'
 	line
@@ -107,23 +117,29 @@ if [ "$1" == "chroot" ]; then
 	echo "::1		    localhost" >> /etc/hosts
 	echo "127.0.1.1		"$HOSTNAME".localdomain "$HOSTNAME >> /etc/hosts
 
+        ls -la /etc/localtime
 
+
+        echo
 	line
 	echo '# [7/'$STEPS'] Setting passwords'
 	line
 
 	# root password
 	echo -e "\n>>> Please set ROOT password"
-	passwd
+	echo -e '1234\n1234' | passwd
+        echo '>>> Password set to `1234`. Change later.'
 
 
 	# l31rb4g password
 	echo -e "\n>>> Please set l31rb4g password"
 	useradd -m l31rb4g
-	passwd l31rb4g
+	echo -e '1234\n1234' | passwd l31rb4g
+        echo '>>> Password set to `1234`. Change later.'
 
 
 	# grub
+        echo
 	line
 	echo '# [8/'$STEPS'] Installing GRUB'
 	line
@@ -143,9 +159,11 @@ if [ "$1" == "chroot" ]; then
 
 
 	# main install
+        echo
 	line
 	echo '# [9/'$STEPS'] Main system install'
 	line
+
 	pacman -S --noconfirm htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-390xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g gconf geany dolphin breeze-icons nfs-utils ctags okular cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip dhcpcd gpick wget
 
 
@@ -154,10 +172,21 @@ if [ "$1" == "chroot" ]; then
 
 
 	# links
+        BIN=/usr/bin
+        
 	ln -s /home/l31rb4g/config/10-monitor.conf /etc/X11/xorg.conf.d
-	ln -s /home/l31rb4g/scripts/aur.sh /usr/bin/aur
-	ln -s /home/l31rb4g/scripts/heidisql.sh /usr/bin/heidisql
-        ln -s /home/l31rb4g/opt/Rambox-0.7.2-linux-x64/rambox /usr/bin
+        ln -s /home/l31rb4g/opt/Rambox-0.7.2-linux-x64/rambox $BIN
+
+	ln -s /home/l31rb4g/scripts/aur $BIN
+	ln -s /home/l31rb4g/scripts/heidisql $BIN
+	ln -s /home/l31rb4g/scripts/ctrlc $BIN
+	ln -s /home/l31rb4g/scripts/vlcshare $BIN
+	ln -s /home/l31rb4g/scripts/hl $BIN
+	ln -s /home/l31rb4g/scripts/timebox $BIN
+
+
+        # hosts
+        echo "18.229.17.122    wbrain-prod" >> /etc/hosts
 
 
 	# services
@@ -167,7 +196,7 @@ if [ "$1" == "chroot" ]; then
 
 	# sudo
 	usermod -aG wheel l31rb4g
-	sh -c 'echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers'
+	echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
 
 	# docker
