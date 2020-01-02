@@ -185,6 +185,7 @@ if [ "$1" == "chroot" ]; then
 	ln -s /home/l31rb4g/scripts/vlcshare $BIN
 	ln -s /home/l31rb4g/scripts/hl $BIN
 	ln -s /home/l31rb4g/scripts/timebox $BIN
+	ln -s /home/l31rb4g/scripts/fireworks $BIN
 
 
         # hosts
