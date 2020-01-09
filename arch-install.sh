@@ -166,11 +166,11 @@ if [ "$1" == "chroot" ]; then
 	echo '# [9/'$STEPS'] Main system install'
 	line
 
-	pacman -S --noconfirm htop sudo xorg i3-wm rxvt-unicode ttf-dejavu dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-390xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g gconf geany dolphin breeze-icons nfs-utils ctags okular cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip dhcpcd gpick wget cheese aws-cli openvpn
+	pacman -S --noconfirm htop sudo xorg i3-wm rxvt-unicode dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-390xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g gconf geany dolphin breeze-icons nfs-utils ctags okular cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip dhcpcd gpick wget cheese aws-cli openvpn
 
 
 	# fonts
-	pacman -S --noconfirm noto-fonts ttf-roboto ttf-inconsolata
+	pacman -S --noconfirm noto-fonts ttf-dejavu ttf-roboto ttf-inconsolata
 
 
 	# links

@@ -1,0 +1,42 @@
+#!/bin/bash
+
+CAMERA='/dev/video0'
+DUMMY='/dev/video2'
+
+trap bye INT
+
+function bye {
+    echo 'lolz'
+    VIDEO_BASE=~/chroma-videos/colortest.mp4
+    ffmpeg -y \
+        -i $VIDEO_BASE \
+        -vf 'scale=1920:1080' \
+        -f v4l2 \
+        $DUMMY
+    exit 0
+}
+
+
+if [ "$1" == "--cam" ]; then
+    ffmpeg \
+        -video_size 1920x1080 \
+        -framerate 25 \
+        -f x11grab \
+        -i :0+0,400 \
+        -i $CAMERA \
+        -filter_complex '[1:v]scale=320:180[scale];[scale]eq=saturation=1.6[eq];[eq]colorkey=0x00FF00:0.6:0.1[ck];[ck]crop=300:180:100:0[cam];[0:v][cam]overlay=1650:878[out]' \
+        -map '[out]' \
+        -pix_fmt yuv420p \
+        -f v4l2 \
+        $DUMMY
+else
+    ffmpeg \
+        -video_size 1920x1080 \
+        -framerate 25 \
+        -f x11grab \
+        -i :0+0,400 \
+        -pix_fmt yuv420p \
+        -f v4l2 \
+        $DUMMY
+fi
+

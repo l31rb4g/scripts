@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ "$1" == "" ]; then
+    echo 'Please inform the duration'
+    exit 1
+fi
+
+if [ "$2" == "" ]; then
+    echo 'Please inform the key'
+    exit 1
+fi
+
+xdotool keydown $2 &
+sleep $1
+xdotool keyup $2
+
