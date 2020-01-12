@@ -4,10 +4,10 @@ function out {
     echo -e '\e[1;'$1'm '$2'\e[m'
 }
 function info {
-    out 34 ":: $1"
+    out 34 ">>> $1"
 }
 function success {
-    out 32 ">>> $1"
+    out 32 "✓ $1"
 }
 function warn {
     out 33 "[!] $1"
