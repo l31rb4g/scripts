@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function out {
-    echo -e '\e[1;'$1'm '$2'\e[m'
+    echo -e '\e[1;'$1'm'$2'\e[m'
 }
 function info {
     out 34 ">>> $1"
