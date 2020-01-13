@@ -16,8 +16,14 @@ function error {
     out 31 "ERROR: $1"
 }
 function contains {
-    has=0
-    for needle in $1; do
-        echo $needle;
+    has=""
+    needle="$1"
+    shift
+    haystack=$(echo $@ | sed 's/ /\n/g')
+    for i in $haystack; do
+        if [ "$i" == "$needle" ]; then
+            has=1
+        fi
     done
+    echo $has
 }
