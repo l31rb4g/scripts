@@ -70,29 +70,29 @@ fi
 
 
 # MAIN COMMAND
-#ffmpeg -y \
-#    -stream_loop -1 \
-#    -i "$VIDEO_BASE" \
-#    -i $CAMERA \
-#    -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
-#    -map '[out]' \
-#    -f v4l2 \
-#    $DUMMY
-
-
-# 3 camadas
-CAM_SCALE='200:112'
-CAM_PAD='430:156'
 ffmpeg -y \
     -stream_loop -1 \
     -i "$VIDEO_BASE" \
     -i $CAMERA \
-    -i ~/chroma-videos/madruga.mp4 \
-    -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[ckout]scale='$CAM_SCALE'[scale];[scale]pad=1280:720:'$CAM_PAD'[gab];[0:v]colorkey=0x00FF00:0.6:0.1[bg];[2:v][gab]overlay[gab2];[gab2][bg]overlay[out]' \
+    -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
     -map '[out]' \
-    -pix_fmt yuv420p \
     -f v4l2 \
     $DUMMY
+
+
+# 3 camadas
+#CAM_SCALE='200:112'
+#CAM_PAD='430:156'
+#ffmpeg -y \
+#    -stream_loop -1 \
+#    -i "$VIDEO_BASE" \
+#    -i $CAMERA \
+#    -i ~/chroma-videos/madruga.mp4 \
+#    -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[ckout]scale='$CAM_SCALE'[scale];[scale]pad=1280:720:'$CAM_PAD'[gab];[0:v]colorkey=0x00FF00:0.6:0.1[bg];[2:v][gab]overlay[gab2];[gab2][bg]overlay[out]' \
+#    -map '[out]' \
+#    -pix_fmt yuv420p \
+#    -f v4l2 \
+#    $DUMMY
 
 
 # screen on outdoor, $1 is outdoor

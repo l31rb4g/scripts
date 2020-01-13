@@ -15,4 +15,9 @@ function warn {
 function error {
     out 31 "ERROR: $1"
 }
-
+function contains {
+    has=0
+    for needle in $1; do
+        echo $needle;
+    done
+}
