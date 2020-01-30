@@ -71,8 +71,10 @@ fi
 
 # MAIN COMMAND
 ffmpeg -y \
+    -thread_queue_size 1024 \
     -stream_loop -1 \
     -i "$VIDEO_BASE" \
+    -thread_queue_size 1024 \
     -i $CAMERA \
     -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
     -map '[out]' \
@@ -81,14 +83,20 @@ ffmpeg -y \
 
 
 # 3 camadas
-#CAM_SCALE='200:112'
-#CAM_PAD='430:156'
+#SIMILARITY2='0.73'
+#CAM_SCALE='800:450'
+#CAM_PAD='210:115'
+#ROTATION='0.46'
+#SECOND_VIDEO=~/chroma-videos/madruga.mp4
 #ffmpeg -y \
+#    -thread_queue_size 1024 \
 #    -stream_loop -1 \
 #    -i "$VIDEO_BASE" \
+#    -thread_queue_size 1024 \
 #    -i $CAMERA \
-#    -i ~/chroma-videos/madruga.mp4 \
-#    -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[ckout]scale='$CAM_SCALE'[scale];[scale]pad=1280:720:'$CAM_PAD'[gab];[0:v]colorkey=0x00FF00:0.6:0.1[bg];[2:v][gab]overlay[gab2];[gab2][bg]overlay[out]' \
+#    -thread_queue_size 1024 \
+#    -i $SECOND_VIDEO \
+#    -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY2':'$BLEND'[ckout];[ckout]scale='$CAM_SCALE'[scale];[scale]pad=1280:720:'$CAM_PAD'[pad];[pad]rotate='$ROTATION'[gab];[0:v]colorkey=0x00FF00:'$SIMILARITY':0.1[bg];[2:v]rotate='$ROTATION'[second];[second][gab]overlay[gab2];[gab2][bg]overlay[out]' \
 #    -map '[out]' \
 #    -pix_fmt yuv420p \
 #    -f v4l2 \

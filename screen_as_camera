@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CAMERA='/dev/video0'
-DUMMY='/dev/video2'
+DUMMY='/dev/video4'
 
 trap bye INT
 
@@ -18,13 +18,20 @@ function bye {
 
 
 if [ "$1" == "--cam" ]; then
+
+    if [ "$2" == "chroma" ]; then
+        FILTER='[1:v]scale=320:180[scale];[scale]eq=saturation=1.6[eq];[eq]colorkey=0x00FF00:0.6:0.1[ck];[ck]crop=300:180:100:0[cam];[0:v][cam]overlay=1650:878[out]'
+    else
+        FILTER='[1:v]scale=320:180[scale];[scale]crop=300:180:100:0[cam];[0:v][cam]overlay=1650:878[out]'
+    fi
+
     ffmpeg \
         -video_size 1920x1080 \
         -framerate 25 \
         -f x11grab \
         -i :0+0,400 \
         -i $CAMERA \
-        -filter_complex '[1:v]scale=320:180[scale];[scale]eq=saturation=1.6[eq];[eq]colorkey=0x00FF00:0.6:0.1[ck];[ck]crop=300:180:100:0[cam];[0:v][cam]overlay=1650:878[out]' \
+        -filter_complex $FILTER \
         -map '[out]' \
         -pix_fmt yuv420p \
         -f v4l2 \

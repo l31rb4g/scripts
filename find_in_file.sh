@@ -1,6 +1,6 @@
 #!/bin/bash
 
-xterm -e bash -c 'echo -e "======================================\n Searching for \e[30;43m'$1'\e[m in project\n======================================\n" && bash' &
+xterm -e bash -c 'echo -e "==================================\n Searching for \e[30;43m'$2'\e[m in file\n==================================\n" && bash' &
 
 sleep 2
 
@@ -14,6 +14,7 @@ if [ $pid ]; then
     #echo -e "Searching for \e[30;43m$1\e[m" > $fd
     #echo -e "=================================" > $fd
     echo "" > $fd
-    (ag --hidden --ignore tags "$1" > $fd)& 
+
+    (ag --hidden --ignore tags "$2" "$1" > $fd)& 
 fi
 
