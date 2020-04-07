@@ -303,6 +303,7 @@ fi
 line
 echo "INSTALLATION DONE! REMOVE THE INSTALLATION MEDIA."
 echo "Press ENTER to reboot"
+line
 read
 
 
