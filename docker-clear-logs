@@ -1,0 +1,7 @@
+#!/bin/bash
+
+container=$1
+
+log=$(docker inspect -f '{{.LogPath}}' $container 2> /dev/null)
+truncate -s 0 $log
+

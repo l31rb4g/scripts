@@ -2,17 +2,19 @@
 
 # Instructions:
 #   1. Boot Arch Linux flashdrive
-#   2. Mount home on /mnt
+#   2. Mount home partition on /mnt
 #   3. Check TARGET_DISK variable
 #   4. Run this script
 
 
+# [!] will be formatted
 TARGET_DISK='/dev/sda'
+
 
 ROOT_PARTITION=$TARGET_DISK'1'
 SWAP_PARTITION=$TARGET_DISK'2'
-HOME_PARTITION='/dev/sdb1'
-STORAGE_PARTITION='/dev/sdc1'
+STORAGE_PARTITION='/dev/sdb1'
+HOME_PARTITION='/dev/sdc1'
 
 HOSTNAME='downquark'
 
@@ -25,6 +27,14 @@ fi
 
 function line {
     echo "#####################################################################"
+}
+
+function confirm {
+	echo
+	echo '-----------------------------'
+	echo ' PRESS ENTER TO CONTINUE'
+	echo '-----------------------------'
+	read
 }
 
 
@@ -49,18 +59,19 @@ if [ "$1" == "" ]; then
         lsblk -f
 
 
+
         echo
 	line
 	echo '# [2/'$STEPS'] Formatting disk ('$PARTITION')'
 	line
 
-	# mounts
 	mkfs.ext4 $PARTITION
 	mkdir /_setup
 	mount $PARTITION /_setup
 
 	mkswap $SWAP_PARTITION
 	swapon $SWAP_PARTITION
+
 
 
         echo
@@ -77,6 +88,7 @@ if [ "$1" == "" ]; then
         mount
 
 
+
         echo
 	line
 	echo '# [4/'$STEPS'] Pacstrap'
@@ -85,10 +97,25 @@ if [ "$1" == "" ]; then
 	#pacman -Syu --noconfirm
 	#pacman -Syu --noconfirm reflector
 	#reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
-	time pacstrap /_setup base
+
+	
+	PACKAGES='base linux linux-firmware htop sudo xorg i3-wm rxvt-unicode dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion openssh maim xclip numlockx base-devel make cmake gdb sdl2 xdotool patchelf ntfs-3g geany dolphin breeze-icons nfs-utils ctags okular cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip dhcpcd gpick wget cheese aws-cli openvpn'
+
+	# nvidia-390xx gconf
+
+	echo
+	echo 'The following packages will be installed:'
+	echo $PACKAGES
+
+	confirm
+
+	time pacstrap /_setup $PACKAGES
+	confirm
+
 	genfstab -U /_setup >> /_setup/etc/fstab
-
-
+	
+	
+	
         echo
 	line
 	echo '# [5/'$STEPS'] CH Rooting'
@@ -99,10 +126,44 @@ fi
 
 if [ "$1" == "chroot" ]; then
 
+
+	# reflector
+	#pacman -Syu --noconfirm
+	#pacman -Syu --noconfirm reflector
+	#reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
+
+
+
         echo
 	line
-	echo '# [6/'$STEPS'] Setting timezone'
+	echo '# [6/'$STEPS'] System configuration'
 	line
+
+	# fonts
+	pacman -S --noconfirm noto-fonts ttf-dejavu ttf-roboto ttf-inconsolata
+
+
+	# links
+        BIN=/usr/bin
+        
+	ln -s /home/l31rb4g/config/10-monitor.conf /etc/X11/xorg.conf.d
+        ln -s /home/l31rb4g/opt/Rambox/rambox $BIN
+
+	ln -s /home/l31rb4g/scripts/aur $BIN
+	ln -s /home/l31rb4g/scripts/heidisql $BIN
+	ln -s /home/l31rb4g/scripts/ctrlc $BIN
+	ln -s /home/l31rb4g/scripts/vlcshare $BIN
+	ln -s /home/l31rb4g/scripts/hl $BIN
+	ln -s /home/l31rb4g/scripts/timebox $BIN
+	ln -s /home/l31rb4g/scripts/fireworks $BIN
+
+
+
+        echo
+	line
+	echo '# [7/'$STEPS'] Setting timezone'
+	line
+
 
 	# timezone, hostname
 	ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
@@ -122,8 +183,9 @@ if [ "$1" == "chroot" ]; then
 
         echo
 	line
-	echo '# [7/'$STEPS'] Setting passwords'
+	echo '# [8/'$STEPS'] Setting passwords'
 	line
+
 
 	# root password
 	echo -e "\n>>> Please set ROOT password"
@@ -143,49 +205,16 @@ if [ "$1" == "chroot" ]; then
 	# grub
         echo
 	line
-	echo '# [8/'$STEPS'] Installing GRUB'
+	echo '# [9/'$STEPS'] Installing GRUB'
 	line
 
 	pacman -Syu --noconfirm
 	pacman -S grub --noconfirm
 	grub-install --target=i386-pc --recheck /dev/sda
 
-	grub-mkconfig
-        ls -la /boot
+	#grub-mkconfig
+        #ls -la /boot
 	grub-mkconfig -o /boot/grub/grub.cfg
-
-
-	# reflector
-	pacman -Syu --noconfirm reflector
-	reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
-
-
-	# main install
-        echo
-	line
-	echo '# [9/'$STEPS'] Main system install'
-	line
-
-	pacman -S --noconfirm htop sudo xorg i3-wm rxvt-unicode dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools python-virtualenvwrapper git vlc xarchiver i3lock bash-completion nvidia-390xx openssh maim xclip numlockx base-devel cmake gdb sdl2 xdotool patchelf ntfs-3g gconf geany dolphin breeze-icons nfs-utils ctags okular cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip dhcpcd gpick wget cheese aws-cli openvpn
-
-
-	# fonts
-	pacman -S --noconfirm noto-fonts ttf-dejavu ttf-roboto ttf-inconsolata
-
-
-	# links
-        BIN=/usr/bin
-        
-	ln -s /home/l31rb4g/config/10-monitor.conf /etc/X11/xorg.conf.d
-        ln -s /home/l31rb4g/opt/Rambox-0.7.2-linux-x64/rambox $BIN
-
-	ln -s /home/l31rb4g/scripts/aur $BIN
-	ln -s /home/l31rb4g/scripts/heidisql $BIN
-	ln -s /home/l31rb4g/scripts/ctrlc $BIN
-	ln -s /home/l31rb4g/scripts/vlcshare $BIN
-	ln -s /home/l31rb4g/scripts/hl $BIN
-	ln -s /home/l31rb4g/scripts/timebox $BIN
-	ln -s /home/l31rb4g/scripts/fireworks $BIN
 
 
         # hosts
@@ -249,15 +278,16 @@ if [ "$1" == "chroot" ]; then
 	echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 	sudo pacman -Syu --noconfirm
 
+        # nvidia
+        sudo -u l31rb4g aur https://aur.archlinux.org/nvidia-340xx-utils.git
+        sudo -u l31rb4g aur https://aur.archlinux.org/nvidia-340xx.git
 
         # wine
         pacman -S --noconfirm wine
 
-
 	# steam
-	pacman -S --noconfirm steam lib32-nvidia-390xx-utils lib32-libdrm
+	pacman -S --noconfirm steam lib32-libdrm
 	sudo -u l31rb4g aur https://aur.archlinux.org/steam-fonts.git
-
 
         # aur
         sudo -u l31rb4g aur https://aur.archlinux.org/v4l2loopback-dkms-git.git

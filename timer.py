@@ -33,7 +33,7 @@ class Timer:
         
         self.last_lap = self.start
         while True:
-            _input = input('\nPressione ENTER para marcar o tempo: ')
+            _input = input('\nPressione ENTER para LAP: ')
             now = datetime.now()
             delta = str(now - self.last_lap)
             self.log('Lap ........: {} ...... ({}) {}'.format(now, delta, _input))

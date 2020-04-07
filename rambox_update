@@ -1,0 +1,30 @@
+#!/bin/bash
+
+dir=/tmp/$(uuidgen)
+
+version='0.7.5'
+
+if [ "$1" != "" ]; then
+    version="$1"
+fi
+
+mkdir $dir
+cd $dir
+
+url=$(
+    curl -s https://github.com/ramboxapp/community-edition/releases/tag/$version \
+        | grep 'linux-amd64.deb' | grep href | sed 's/.*href="\([^"]\+\)".*/\1/'
+)
+
+wget -O rambox.deb https://github.com$url
+
+ar x rambox.deb
+unxz data.tar.xz
+tar -xvf data.tar
+
+killall rambox
+rm -rf /home/l31rb4g/opt/Rambox
+mv opt/Rambox /home/l31rb4g/opt
+
+cd -
+

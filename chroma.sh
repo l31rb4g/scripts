@@ -3,7 +3,7 @@
 VIDEO_BASE=~/chroma-videos/wbrain.mp4
 
 CAMERA='/dev/video0'
-DUMMY='/dev/video2'
+DUMMY='/dev/video4'
 
 SIMILARITY='0.66'
 BLEND='0.1'
@@ -15,7 +15,7 @@ COLOR='00FF00'
 OUTPUT=~/chroma-videos/output.mp4
 
 
-ls /dev/video2 > /dev/null 2>&1
+ls $DUMMY > /dev/null 2>&1
 if [ $? != 0 ]; then
     sudo modprobe v4l2loopback
 fi

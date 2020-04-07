@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ "$1" == "" ] || [ "$2" == "" ]; then
+    echo -e "\nUsage: search_and_replace [search_string] [replace_string]\n"
+    exit 1
+fi
+
+search=$1
+replace=$2
+
+echo
+for filename in $(ag "$1" -l); do
+    echo '>>> Changing file' $filename
+    sed -i 's/'$1'/'$2'/g' $filename
+done
+
+echo
+
