@@ -279,8 +279,10 @@ if [ "$1" == "chroot" ]; then
 	sudo pacman -Syu --noconfirm
 
         # nvidia
-        sudo -u l31rb4g aur https://aur.archlinux.org/nvidia-340xx-utils.git
-        sudo -u l31rb4g aur https://aur.archlinux.org/nvidia-340xx.git
+        sudo -u l31rb4g aur https://aur.archlinux.org/nvidia-390xx-utils.git
+        sudo -u l31rb4g aur https://aur.archlinux.org/nvidia-390xx.git
+        sudo -u l31rb4g aur https://aur.archlinux.org/lib32-nvidia-390xx-utils.git
+
 
         # wine
         pacman -S --noconfirm wine
