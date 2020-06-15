@@ -99,7 +99,7 @@ if [ "$1" == "" ]; then
 	#reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
 
 	
-	PACKAGES='base linux linux-firmware htop sudo xorg i3-wm dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools git vlc xarchiver i3lock bash-completion openssh maim xclip numlockx base-devel make cmake gdb sdl2 xdotool patchelf ntfs-3g geany dolphin breeze-icons nfs-utils ctags okular cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip unzip dhcpcd gpick wget cheese aws-cli whois gnome-keyring libsecret fakeroot binutils time'
+	PACKAGES='base linux linux-firmware htop sudo xorg i3-wm dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools git vlc xarchiver i3lock bash-completion openssh maim xclip numlockx base-devel make cmake gdb sdl2 xdotool patchelf ntfs-3g geany dolphin breeze-icons nfs-utils ctags evince cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip unzip dhcpcd gpick wget cheese aws-cli whois gnome-keyring libsecret fakeroot binutils time'
 
 	# nvidia-390xx gconf
 

@@ -3,7 +3,7 @@
 VIDEO_BASE=~/chroma-videos/wbrain.mp4
 
 CAMERA='/dev/video0'
-DUMMY='/dev/video4'
+DUMMY='/dev/video2'
 
 SIMILARITY='0.66'
 BLEND='0.1'
@@ -11,6 +11,7 @@ SATURATION='1.6'
 
 COLOR='64CF6C' # novo verde
 COLOR='00FF00'
+#COLOR='80DEB2'
 
 OUTPUT=~/chroma-videos/output.mp4
 
@@ -40,6 +41,9 @@ if [ "$1" == "encode" ]; then
 fi
 
 if [ "$1" == "hide" ]; then
+    if [ "$2" != "" ]; then
+        VIDEO_BASE="$2"
+    fi
     hide
     exit
 fi
@@ -76,10 +80,22 @@ ffmpeg -y \
     -i "$VIDEO_BASE" \
     -thread_queue_size 1024 \
     -i $CAMERA \
-    -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
+    -filter_complex '[1:v]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
     -map '[out]' \
     -f v4l2 \
     $DUMMY
+
+#ffmpeg -y \
+#    -thread_queue_size 1024 \
+#    -stream_loop -1 \
+#    -i "$VIDEO_BASE" \
+#    -thread_queue_size 1024 \
+#    -i $CAMERA \
+#    -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
+#    -filter_complex '[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
+#    -map '[out]' \
+#    -f v4l2 \
+#    $DUMMY
 
 
 # 3 camadas

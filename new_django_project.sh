@@ -47,12 +47,13 @@ sed -i "s/django.db.backends.sqlite3/django.db.backends.mysql/" \
     $NAME/settings.py 
 
 sed -i "s/'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),/'NAME': '$NAME',\
-    \n        'USER': '$NAME',\n        'PASSWORD': '123456'/" \
+    \n        'USER': '$NAME',\n        'PASSWORD': '123456',\n        'PORT': 3366/" \
     $NAME/settings.py 
 
 
 # database
-sudo mysql -e "CREATE DATABASE $NAME; CREATE USER $NAME@localhost IDENTIFIED BY '123456'; GRANT ALL ON $NAME.* to $NAME@localhost"
+sudo mysql -h 127.0.1 -P 3366 -e \
+    "CREATE DATABASE $NAME; CREATE USER $NAME@localhost IDENTIFIED BY '123456'; GRANT ALL ON $NAME.* to $NAME@localhost"
 ./manage.py makemigrations
 ./manage.py migrate
 

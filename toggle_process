@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ "$1" != "" ]; then
+    PID=$(ps aux | grep $1 | grep -v grep | grep -v toggle_process \
+        | awk '{print $2}')
+
+    PNAME=$(ps aux | grep $1 | grep -v grep | grep -v toggle_process \
+        | awk '{for (i=11;i<=NF;++i) printf "%s ", $i; print ""}')
+
+    if [ "$2" == "--dry" ]; then
+        echo $PNAME
+        exit
+    fi
+
+    if [ "$PID" != "" ]; then
+        file='/tmp/toggle_process_'$PID
+        if [ -f $file ]; then
+            kill -18 $PID
+            rm $file
+            echo 'Resuming '$PNAME
+        else
+            kill -19 $PID
+            touch $file
+            echo 'Pausing '$PNAME
+        fi
+    fi
+fi
