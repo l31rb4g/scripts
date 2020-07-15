@@ -14,13 +14,13 @@ if [ "$1" != "" ]; then
 
     if [ "$PID" != "" ]; then
         file='/tmp/toggle_process_'$PID
-        if [ -f $file ]; then
+        if [ -f "$file" ]; then
             kill -18 $PID
-            rm $file
+            rm "$file"
             echo 'Resuming '$PNAME
         else
             kill -19 $PID
-            touch $file
+            touch "$file"
             echo 'Pausing '$PNAME
         fi
     fi
