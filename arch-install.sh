@@ -99,9 +99,7 @@ if [ "$1" == "" ]; then
 	#reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
 
 	
-	PACKAGES='base linux linux-firmware htop sudo xorg i3-wm dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools git vlc xarchiver i3lock bash-completion openssh maim xclip numlockx base-devel make cmake gdb sdl2 xdotool patchelf ntfs-3g geany dolphin breeze-icons nfs-utils ctags evince cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip unzip dhcpcd gpick wget cheese aws-cli whois gnome-keyring libsecret fakeroot binutils time xsettingsd'
-
-	# nvidia-390xx gconf
+	PACKAGES='base linux linux-firmware htop sudo xorg i3-wm dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools git vlc xarchiver i3lock bash-completion openssh maim xclip numlockx base-devel make cmake gdb sdl2 xdotool patchelf ntfs-3g geany dolphin breeze-icons nfs-utils ctags evince cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip unzip dhcpcd gpick wget cheese aws-cli whois gnome-keyring libsecret fakeroot binutils time xsettingsd dnsutils'
 
 	echo
 	echo 'The following packages will be installed:'
@@ -279,9 +277,10 @@ if [ "$1" == "chroot" ]; then
 	sudo pacman -Syu --noconfirm
 
         # nvidia
-        sudo -u l31rb4g aur https://aur.archlinux.org/nvidia-390xx-utils.git
-        sudo -u l31rb4g aur https://aur.archlinux.org/nvidia-390xx.git
-        sudo -u l31rb4g aur https://aur.archlinux.org/lib32-nvidia-390xx-utils.git
+        #sudo -u l31rb4g aur https://aur.archlinux.org/nvidia-390xx-utils.git
+        #sudo -u l31rb4g aur https://aur.archlinux.org/nvidia-390xx.git
+        #sudo -u l31rb4g aur https://aur.archlinux.org/lib32-nvidia-390xx-utils.git
+        pacman -S nvidia nvidia-dkms nvidia-utils lib32-nvidia-utils
 
 
         # wine

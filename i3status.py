@@ -11,7 +11,7 @@ is_vertical = '--vertical' in sys.argv
 
 # network devices
 network_devices = {
-    'downquark': 'enp0s25'
+    'downquark': 'eno1'
 }
 
 # config

@@ -3,8 +3,8 @@ import sys
 import datetime
 
 if len(sys.argv) == 1:
-    print('\nUsage:')
-    print('  flowering_time [data inicial: dd/mm/yyyy] [semanas]\n')
+    print('\n Usage:')
+    print('   flowering_time [data inicial: dd/mm/yyyy] [semanas]\n')
     sys.exit(1)
 else:
     date = sys.argv[1].split('/')
@@ -17,9 +17,9 @@ else:
     end = start + datetime.timedelta(weeks=weeks)
 
     print()
-    print('Início da floração: .... {}'.format(start.strftime('%d/%m/%Y')))
-    print('Período: ............... {} semanas'.format(weeks))
-    print('Fim da floração: ....... {}'.format(end.strftime('%d/%m/%Y')))
+    print(' Início da floração: .... {}'.format(start.strftime('%d/%m/%Y')))
+    print(' Período: ............... {} semanas'.format(weeks))
+    print(' Fim da floração: ....... {}'.format(end.strftime('%d/%m/%Y')))
     print()
 
     for i in range(weeks + 1):
@@ -27,7 +27,7 @@ else:
         _date = start + datetime.timedelta(weeks=i)
 
         if i == 0:
-            print('  {} - início'.format(
+            print('   {} - início'.format(
                 _date.strftime('%d/%m'),
                 i,
             ))
@@ -38,7 +38,7 @@ else:
             if i == weeks:
                 info = '(colheita)'
 
-            print('  {} - semana {} {}'.format(
+            print('   {} - semana {} {}'.format(
                 _date.strftime('%d/%m'),
                 i,
                 info
