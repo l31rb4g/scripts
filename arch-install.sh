@@ -7,7 +7,7 @@
 #   4. Run this script
 
 
-# [!] will be formatted
+# [!] will be erased
 TARGET_DISK='/dev/sda'
 
 
