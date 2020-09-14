@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ "$1" == "" ]; then
+    is_project=0
+    stat .git > /dev/null 2>&1
+    if [ $? == 0 ]; then
+        is_project=1
+    fi
+
+    if [ $is_project == 1 ]; then
+        vim
+    else
+        vim /tmp/foo
+    fi
+
+else
+    vim $1
+fi
+
