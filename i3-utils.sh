@@ -1,6 +1,6 @@
 #!/bin/bash
 
-current=$(i3-msg -t get_outputs | jq '.[1].current_workspace')
+current=$(i3-msg -t get_outputs | jq '.[0].current_workspace')
 
 if [ "$1" == "focus" ]; then
     i3-msg 'rename workspace '$current' to 1'

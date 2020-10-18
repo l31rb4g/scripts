@@ -1,18 +1,47 @@
 #!/bin/bash
 
-if [ "$1" == "" ] || [ "$2" == "" ]; then
+if [ "$1" == "" ] && [ "$2" == "" ]; then
     echo -e "\nUsage: search_and_replace [search_string] [replace_string]\n"
     exit 1
 fi
 
-search=$1
-replace=$2
+search="$1"
+replace="$2"
 
 echo
-for filename in $(ag "$1" -l); do
-    echo '>>> Changing file' $filename
-    sed -i 's/'$1'/'$2'/g' $filename
-done
+
+if [ "$2" != "" ]; then
+
+    echo '================================='
+    echo ' Find:' $search
+    echo ' Replace:' $replace
+
+    result=$(ag "$1" -l)
+    occurrences=$(echo "$result" | wc -l)
+
+    echo ' Occurrences:' $occurrences files
+    echo '================================='
+    echo
+
+    for filename in $result; do
+        echo -e '\e[1;32m'$filename'\e[m'
+        ag "$search" "$filename"
+        echo
+
+        regex='s/'$search'/'$replace'/g'
+        sed -i "$regex" $filename
+    done
+
+    echo
+    s='s'
+    if [ $occurrences == 1 ]; then
+        s=''
+    fi
+    echo -e "\e[1;38m>>> \e[0;32mDone! \e[35m$occurrences file$s\e[32m modified.\e[m"
+
+else
+    ag "$search"
+fi
 
 echo
 
