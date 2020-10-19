@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function help {
+    echo -e '\n Usage: sound-switcher [line|headphones]\n'
+}
+
+if [ "$1" == "line" ] || [ "$1" == "l" ]; then
+    pactl set-sink-port 0 analog-output-lineout
+
+elif [ "$1" == "headphones" ] || [ "$1" == "h" ]; then
+    pactl set-sink-port 0 analog-output-headphones
+    amixer -c0 sset Front 0 > /dev/null
+else
+    help
+fi
