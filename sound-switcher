@@ -4,12 +4,34 @@ function help {
     echo -e '\n Usage: sound-switcher [line|headphones]\n'
 }
 
-if [ "$1" == "line" ] || [ "$1" == "l" ]; then
-    pactl set-sink-port 0 analog-output-lineout
+action=$1
+audio_output_file='/tmp/audio_output'
 
-elif [ "$1" == "headphones" ] || [ "$1" == "h" ]; then
+if [ "$action" == "" ]; then # toggle
+
+    if [ ! -f $audio_output_file ]; then
+        echo 'h' > $audio_output_file
+    fi
+
+    current=$(cat $audio_output_file)
+    if [ "$current" == "h" ]; then
+        action='l'
+    else
+        action='h'
+    fi
+    
+fi
+
+if [ "$action" == "line" ] || [ "$action" == "l" ]; then
+    echo 'audio output to line'
+    pactl set-sink-port 0 analog-output-lineout
+    echo l > $audio_output_file
+
+elif [ "$action" == "headphones" ] || [ "$action" == "h" ]; then
+    echo 'audio output to headphones'
     pactl set-sink-port 0 analog-output-headphones
     amixer -c0 sset Front 0 > /dev/null
+    echo h > $audio_output_file
 else
     help
 fi

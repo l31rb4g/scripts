@@ -139,6 +139,16 @@ while True:
     if 'yes' in is_mute:
         volume = 'muted'
 
+    audio_output_file = '/tmp/audio_output'
+    if os.path.exists(audio_output_file):
+        with open(audio_output_file) as _f:
+            audio_output = _f.read().strip().upper()
+    else:
+        audio_output = 'H'
+    
+    audio_output = (' ' + audio_output.strip())
+
+
     data = [
         block('CPU ' + cpu_usage, color='#ff3333'),
         separator,
@@ -180,6 +190,7 @@ while True:
         separator,
 
         block(volume , color='#66ffff'),
+        block(audio_output , color='#66ffff'),
         separator,
 
         block(datetime.now().strftime('%d/%m/%Y'), color='#bbbbbb'),
