@@ -25,13 +25,16 @@ fi
 if [ "$action" == "line" ] || [ "$action" == "l" ]; then
     echo 'audio output to line'
     pactl set-sink-port 0 analog-output-lineout
+    pactl set-sink-volume 0 40%
     echo l > $audio_output_file
 
 elif [ "$action" == "headphones" ] || [ "$action" == "h" ]; then
     echo 'audio output to headphones'
     pactl set-sink-port 0 analog-output-headphones
     amixer -c0 sset Front 0 > /dev/null
+    pactl set-sink-volume 0 60%
     echo h > $audio_output_file
+
 else
     help
 fi
