@@ -1,6 +1,6 @@
 #!/bin/bash
 
-xterm -e bash -c 'echo -e "======================================\n Searching for \e[30;43m'$1'\e[m in project\n======================================\n" && bash' &
+konsole -e bash -c 'echo -e "======================================\n Searching for \e[30;43m'$1'\e[m in project\n======================================\n" && bash' &
 
 sleep 2
 

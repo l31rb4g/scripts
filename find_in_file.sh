@@ -1,6 +1,6 @@
 #!/bin/bash
 
-xterm -e bash -c 'echo -e "==================================\n Searching for \e[30;43m'$2'\e[m in file\n==================================\n" && bash' &
+konsole -e bash -c 'echo -e "==================================\n Searching for \e[30;43m'$2'\e[m in file\n==================================\n" && bash' &
 
 sleep 2
 
