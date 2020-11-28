@@ -16,7 +16,7 @@ network_devices = {
 
 # config
 config = {
-    'interval': 1,
+    'interval': 2,
     'separator': ' | ',
     'device': network_devices[os.uname().nodename],
 }

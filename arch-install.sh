@@ -13,8 +13,8 @@ TARGET_DISK='/dev/sda'
 
 ROOT_PARTITION=$TARGET_DISK'1'
 SWAP_PARTITION=$TARGET_DISK'2'
-STORAGE_PARTITION='/dev/sdb1'
-HOME_PARTITION='/dev/sdc1'
+HOME_PARTITION='/dev/sdb1'
+STORAGE_PARTITION='/dev/sdc1'
 
 HOSTNAME='downquark'
 
@@ -99,7 +99,7 @@ if [ "$1" == "" ]; then
 	#reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
 
 	
-	PACKAGES='base linux linux-firmware htop sudo xorg i3-wm dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools git vlc xarchiver i3lock bash-completion openssh maim xclip numlockx base-devel make cmake gdb sdl2 xdotool patchelf ntfs-3g geany dolphin breeze-icons nfs-utils ctags evince cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip unzip dhcpcd gpick wget cheese aws-cli whois gnome-keyring libsecret fakeroot binutils time xsettingsd dnsutils'
+	PACKAGES='base linux-lts linux-firmware htop sudo xorg i3-wm dmenu xorg-xinit firefox xterm pulseaudio pavucontrol pcmanfm python net-tools git vlc xarchiver i3lock bash-completion openssh maim xclip numlockx base-devel make cmake gdb sdl2 xdotool patchelf ntfs-3g geany dolphin breeze-icons nfs-utils ctags evince cups the_silver_searcher gitg tig docker jdk8-openjdk jq zenity docker-compose python-mysqlclient sassc zip unzip dhcpcd gpick wget cheese aws-cli whois gnome-keyring libsecret fakeroot binutils time xsettingsd dnsutils konsole gwenview'
 
 	echo
 	echo 'The following packages will be installed:'
@@ -108,7 +108,7 @@ if [ "$1" == "" ]; then
 	confirm
 
 	time pacstrap /_setup $PACKAGES
-	confirm
+	#confirm
 
 	genfstab -U /_setup >> /_setup/etc/fstab
 	
