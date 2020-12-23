@@ -24,7 +24,8 @@ if [ "$1" != "" ]; then
         file='/tmp/toggle_process_'$ARG
 
         if [ -f $file ]; then
-            echo 'Resuming '$ARG
+            echo '>>> Resuming '$ARG
+            echo
             rm $file
 
             for p in $PID; do
@@ -34,7 +35,7 @@ if [ "$1" != "" ]; then
             done
 
         else
-            echo 'Pausing '$ARG
+            echo '>>> Pausing '$ARG
             touch $file
 
             for p in $PID; do
