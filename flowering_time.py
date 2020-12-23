@@ -1,19 +1,32 @@
 #!/bin/env python
+import re
 import sys
 import datetime
 
 if len(sys.argv) == 1:
     print('\n Usage:')
-    print('   flowering_time [data inicial: dd/mm/yyyy] [semanas]\n')
+    print('   flowering_time [data inicial: dd/mm/yyyy] <semanas>\n')
     sys.exit(1)
+
 else:
-    date = sys.argv[1].split('/')
-    weeks = 9
-    if len(sys.argv) >= 3:
+    
+    date = sys.argv[1]
+
+    if not re.findall('^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$', sys.argv[1]):
+        now = datetime.datetime.now()
+        date = now.strftime('%d/%m/%Y')
+        print('dt1', date)
+        weeks = int(sys.argv[1])
+
+    else:
         weeks = int(sys.argv[2])
 
+    date = [int(i) for i in date.split('/')]
 
-    start = datetime.datetime(year=2020, month=7, day=7)
+    if not weeks:
+        weeks = 9
+
+    start = datetime.datetime(year=date[2], month=date[1], day=date[0])
     end = start + datetime.timedelta(weeks=weeks)
 
     print()

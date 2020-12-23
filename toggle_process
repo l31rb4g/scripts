@@ -1,27 +1,50 @@
 #!/bin/bash
 
 if [ "$1" != "" ]; then
+
+    ARG=$(echo $1)
+
     PID=$(ps aux | grep $1 | grep -v grep | grep -v toggle_process \
         | awk '{print $2}')
 
     PNAME=$(ps aux | grep $1 | grep -v grep | grep -v toggle_process \
         | awk '{for (i=11;i<=NF;++i) printf "%s ", $i; print ""}')
 
+    BIN_PATH=$(echo $PNAME | sed 's/\([^ ]\+\) .*/\1/g')
+
     if [ "$2" == "--dry" ]; then
         echo $PNAME
         exit
     fi
 
+
     if [ "$PID" != "" ]; then
-        file='/tmp/toggle_process_'$PID
-        if [ -f "$file" ]; then
-            kill -18 $PID
-            rm "$file"
-            echo 'Resuming '$PNAME
+        
+        FIRST_PID=$(echo $PID | sed 's/^\([0-9]\+\) .*/\1/g')
+        file='/tmp/toggle_process_'$ARG
+
+        if [ -f $file ]; then
+            echo 'Resuming '$ARG
+            rm $file
+
+            for p in $PID; do
+                if [ "$p" ]; then
+                    kill -18 $p > /dev/null 2>&1
+                fi
+            done
+
         else
-            kill -19 $PID
-            touch "$file"
-            echo 'Pausing '$PNAME
+            echo 'Pausing '$ARG
+            touch $file
+
+            for p in $PID; do
+                if [ "$p" ]; then
+                    kill -19 $p > /dev/null 2>&1
+                fi
+            done
         fi
+
+    else
+        echo "No process found :("
     fi
 fi

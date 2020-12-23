@@ -134,7 +134,7 @@ while True:
     # if is_mute != '':
         # volume = 'muted'
 
-    volume = shell("pactl list sinks| grep Volume | grep -v 'Base Volume' | sed 's/.* \([0-9]\+\)%.*/\\1/'") + '%'
+    volume = shell("pactl list sinks| grep Volume | grep -v 'Base Volume' | head -n1 | sed 's/.* \([0-9]\+\)%.*/\\1/'") + '%'
     is_mute = shell("pactl list sinks | grep Mute")
     if 'yes' in is_mute:
         volume = 'muted'
