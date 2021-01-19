@@ -71,8 +71,12 @@ if __name__ == '__main__':
     with open(TMP_FILE, 'w') as f:
         f.write("0")
 
-    debug('Timebox finalizado!')
+    msg = 'Timebox finalizado!'
+
+    debug(msg)
     cancel()
+
+    call(['notify-send', msg])
 
     call(['cvlc', '--play-and-exit', SOUND], stderr=null)
 
