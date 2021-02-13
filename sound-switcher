@@ -22,22 +22,29 @@ if [ "$action" == "" ]; then # toggle
     
 fi
 
-automute=$(amixer -c 0 sget "Auto-Mute Mode" | grep Item0 | grep Enabled)
+CARD=1
+
+automute=$(amixer -c $CARD sget "Auto-Mute Mode" | grep Item0 | grep Enabled)
 if [ "$automute" != "" ]; then
-    amixer -c 0 sset "Auto-Mute Mode" Disabled
+    amixer -c $CARD sset "Auto-Mute Mode" Disabled
 fi
 
 if [ "$action" == "line" ] || [ "$action" == "l" ]; then
+
     #echo 'audio output to line'
     pactl set-sink-port 0 analog-output-lineout
     pactl set-sink-volume 0 40%
+
     echo l > $audio_output_file
 
 elif [ "$action" == "headphones" ] || [ "$action" == "h" ]; then
+
     #echo 'audio output to headphones'
+
     pactl set-sink-port 0 analog-output-headphones
-    amixer -c0 sset Front 0 > /dev/null
-    pactl set-sink-volume 0 60%
+    amixer -c $CARD sset Front 0 > /dev/null
+    pactl set-sink-volume 0 70%
+
     echo h > $audio_output_file
 
 else
