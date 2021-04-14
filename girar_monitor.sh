@@ -14,6 +14,6 @@ if [ "$orientation" == "h" ]; then
 elif [ "$orientation" == "v" ]; then
     xrandr --output DVI-D-0 --rotate right
     xrandr --output DVI-D-0 --pos 1920x0
-    xrandr --output DP-0 --pos 0x350
+    xrandr --output DP-0 --pos 0x400
 fi
 

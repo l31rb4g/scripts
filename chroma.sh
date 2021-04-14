@@ -1,17 +1,16 @@
 #!/bin/bash
 
-VIDEO_BASE=~/chroma-videos/wbrain.mp4
+VIDEO_BASE=~/chroma-videos/cabana.mp4
 
 CAMERA='/dev/video0'
 DUMMY='/dev/video2'
 
-SIMILARITY='0.66'
-BLEND='0.1'
-SATURATION='1.6'
+SIMILARITY='0.3'
+BLEND='0.0'
+SATURATION='1.5'
 
-COLOR='64CF6C' # novo verde
-COLOR='00FF00'
-#COLOR='80DEB2'
+COLOR='D5F8C7' # novo verde
+#COLOR='00FF00'
 
 OUTPUT=~/chroma-videos/output.mp4
 
@@ -74,28 +73,27 @@ fi
 
 
 # MAIN COMMAND
+#ffmpeg -y \
+    #-thread_queue_size 1024 \
+    #-stream_loop -1 \
+    #-i "$VIDEO_BASE" \
+    #-thread_queue_size 1024 \
+    #-i $CAMERA \
+    #-filter_complex '[1:v]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
+    #-map '[out]' \
+    #-f v4l2 \
+    #$DUMMY
+
 ffmpeg -y \
     -thread_queue_size 1024 \
     -stream_loop -1 \
     -i "$VIDEO_BASE" \
     -thread_queue_size 1024 \
     -i $CAMERA \
-    -filter_complex '[1:v]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
+    -filter_complex '[1:v]crop=850:720[crop];[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay=x=200[out]' \
     -map '[out]' \
     -f v4l2 \
     $DUMMY
-
-#ffmpeg -y \
-#    -thread_queue_size 1024 \
-#    -stream_loop -1 \
-#    -i "$VIDEO_BASE" \
-#    -thread_queue_size 1024 \
-#    -i $CAMERA \
-#    -filter_complex '[1:v]crop=1100:720:100:0[crop];[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
-#    -filter_complex '[crop]eq=saturation='$SATURATION'[eq];[eq]colorkey=0x'$COLOR':'$SIMILARITY':'$BLEND'[ckout];[0:v][ckout]overlay[out]' \
-#    -map '[out]' \
-#    -f v4l2 \
-#    $DUMMY
 
 
 # 3 camadas

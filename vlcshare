@@ -9,7 +9,8 @@ if [ "$1" == "2" ]; then
         --screen-left=1920 \
         --screen-width=1080 \
         --screen-height=960 \
-        screen:// :screen-mouse-image=file:///home/l31rb4g/cursor.png
+        :screen-mouse-image=cursor.png \
+        screen://
 
 else
     vlc \
@@ -20,5 +21,7 @@ else
         --screen-left=0 \
         --screen-width=1920 \
         --screen-height=1080 \
-        screen:// :screen-mouse-image=file:///home/l31rb4g/cursor.png
+        screen:// \
+        :screen-mouse-image=/tmp/cursor2.png
 fi
+
