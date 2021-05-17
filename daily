@@ -1,0 +1,6 @@
+#!/bin/bash
+
+URL="https://meet.google.com/bmo-jrzr-kvs?authuser=1"
+
+google-chrome-stable $URL
+
