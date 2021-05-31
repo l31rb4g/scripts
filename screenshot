@@ -1,0 +1,8 @@
+#!/bin/bash
+
+clipctl disable
+
+maim -u -s --format=png /dev/stdout | xclip -i -selection clipboard -t image/png
+
+clipctl enable
+

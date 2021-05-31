@@ -1,6 +1,11 @@
 #!/bin/bash
 
-CARD=1
+CARD=0
+
+snd=$(amixer -c $CARD | grep 'Auto-Mute Mode')
+if [ "$snd" == "" ]; then
+    CARD=1
+fi
 
 #com 0:
 #[l31rb4g ~]$ amixer
